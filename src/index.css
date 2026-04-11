@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@layer components {
+  .glass-card {
+    @apply rounded-3xl border border-white/20 shadow-2xl;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.16),
+      rgba(255, 255, 255, 0.08)
+    );
+    backdrop-filter: blur(18px);
+    box-shadow:
+      0 20px 55px rgba(3, 8, 22, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .input-field {
+    @apply w-full rounded-2xl border px-4 py-4 text-white placeholder-white/60 transition-all duration-300 focus:outline-none focus:ring-2;
+    border-color: rgba(255, 255, 255, 0.24);
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+
+  .input-field:focus {
+    border-color: rgba(167, 139, 250, 0.75);
+    box-shadow:
+      0 0 0 2px rgba(124, 58, 237, 0.28),
+      0 10px 28px rgba(91, 33, 182, 0.22);
+  }
+
+  .btn-career {
+    @apply relative overflow-hidden rounded-2xl border px-8 py-4 font-semibold text-white transition-all duration-300;
+    border-color: rgba(196, 181, 253, 0.35);
+    background-image: linear-gradient(125deg, #5b21b6 0%, #7c3aed 40%, #a78bfa 100%);
+    box-shadow: 0 10px 28px rgba(91, 33, 182, 0.45);
+  }
+
+  .btn-career:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      0 14px 30px rgba(91, 33, 182, 0.55),
+      0 0 38px rgba(167, 139, 250, 0.35);
+  }
+
+  .btn-career::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0.1) 65%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    transform: translateX(-115%);
+    transition: transform 0.55s ease;
+  }
+
+  .btn-career:hover::before {
+    transform: translateX(115%);
+  }
+
+  .career-glow {
+    box-shadow:
+      0 0 0 1px rgba(167, 139, 250, 0.28),
+      0 0 36px rgba(91, 33, 182, 0.3),
+      0 0 64px rgba(139, 92, 246, 0.22);
+  }
+
+  .career-glow:hover {
+    box-shadow:
+      0 0 0 1px rgba(196, 181, 253, 0.4),
+      0 0 54px rgba(124, 58, 237, 0.38),
+      0 0 80px rgba(167, 139, 250, 0.28);
+  }
+
+  .page-shell {
+    position: relative;
+  }
+
+  .page-shell::before,
+  .page-shell::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(64px);
+    opacity: 0.45;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .page-shell::before {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(59, 7, 100, 0.45), rgba(59, 7, 100, 0));
+    top: -40px;
+    left: -80px;
+  }
+
+  .page-shell::after {
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.42), rgba(124, 58, 237, 0));
+    bottom: -80px;
+    right: -70px;
+  }
+}
+
+/* 3D background: fixed left ~50% of viewport — diagram lives in this band */
+.three-bg-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 50vw;
+  height: 100%;
+  max-height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.three-bg-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Main app content sits in the right 50% (aligned with theme) */
+.layout-with-left-3d {
+  padding-left: 50vw;
+  padding-right: clamp(0.75rem, 2vw, 1.5rem);
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .layout-with-left-3d {
+    padding-left: 50vw;
+    padding-right: 0.5rem;
+  }
+}
+
+@layer utilities {
+  .shadow-glow {
+    box-shadow: 0 0 22px rgba(99, 102, 241, 0.45);
+  }
+
+  .shadow-glow-lg {
+    box-shadow: 0 0 44px rgba(45, 212, 191, 0.34);
+  }
+
+  .text-career-gradient {
+    background-image: linear-gradient(120deg, #e9d5ff 0%, #c4b5fd 35%, #a78bfa 100%);
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+html {
+  background-color: #0d1026;
+  color: #ffffff;
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Outfit', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Same base as 3D panel (#0d1026) — centered glows so left/right are not two different colors */
+  background-color: #0d1026;
+  background-attachment: fixed;
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+  background:
+    linear-gradient(180deg, rgba(139, 92, 246, 0.06), transparent 42%, rgba(30, 27, 75, 0.08));
+  animation: driftAura 18s ease-in-out infinite alternate;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.35;
+  background-size: 46px 46px;
+  mask-image: radial-gradient(circle at center, black 35%, transparent 82%);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Custom scrollbar */
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(11, 16, 33, 0.9);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #a78bfa, #7c3aed, #c4b5fd);
+   border-radius: 999px;
+   border: 2px solid #0b1021;
+ }
+ 
+ *::-webkit-scrollbar-thumb:hover {
+   background: linear-gradient(180deg, #ddd6fe, #a78bfa, #e9d5ff);
+ }
+ 
+ * {
+   scrollbar-width: thin;
+   scrollbar-color: #a78bfa #0b1021;
+ }
+
+/* Loader 3D ring animation */
+.loader-3d {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  transform-style: preserve-3d;
+  perspective: 900px;
+}
+
+.loader-3d span {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 3px solid transparent;
+  border-top-color: #60a5fa;
+  border-right-color: #a78bfa;
+  box-shadow: 0 0 24px rgba(96, 165, 250, 0.35);
+  animation: spin3d 1.4s linear infinite;
+}
+
+.loader-3d span:nth-child(2) {
+  inset: 10px;
+  border-top-color: #22d3ee;
+  border-right-color: #818cf8;
+  animation-duration: 1.8s;
+  animation-direction: reverse;
+}
+
+.loader-3d span:nth-child(3) {
+  inset: 22px;
+  border-top-color: #c084fc;
+  border-right-color: #60a5fa;
+  animation-duration: 1.2s;
+}
+
+@keyframes spin3d {
+  0% {
+    transform: rotateX(58deg) rotateY(0deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(58deg) rotateY(360deg) rotateZ(360deg);
+  }
+}
+
+@keyframes driftAura {
+  0% {
+    transform: translate3d(-1.5%, -1%, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(1.5%, 1.5%, 0) scale(1.04);
+  }
+}

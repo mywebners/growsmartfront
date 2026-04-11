@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production build (regenerate with npm run build)
+build/
+dist/
+
+# Local / secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE & OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test / cache
+coverage/
+.eslintcache
+*.tsbuildinfo
+
+# Optional tooling caches
+.cache/

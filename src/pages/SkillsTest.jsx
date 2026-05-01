@@ -5,19 +5,52 @@ import { motion } from "framer-motion";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
 
+const DIMENSIONS = [
+  "Linguistic",
+  "Musical",
+  "Bodily",
+  "Logical",
+  "Spatial",
+  "Interpersonal",
+  "Intrapersonal",
+  "Naturalist",
+];
+
+const questions = [
+  { id: "Linguistic-1", dimension: "Linguistic", text: "How confident are you in writing clear essays, stories, or reports?", icon: "✍️" },
+  { id: "Linguistic-2", dimension: "Linguistic", text: "How well can you explain difficult topics in your own words?", icon: "🗨️" },
+  { id: "Musical-1", dimension: "Musical", text: "How easily do you notice rhythm, tone, or beat changes in sounds?", icon: "🎵" },
+  { id: "Musical-2", dimension: "Musical", text: "How strong is your memory for melodies or tunes after hearing them?", icon: "🎧" },
+  { id: "Bodily-1", dimension: "Bodily", text: "How good is your body coordination in sports, dance, or practical tasks?", icon: "🏃" },
+  { id: "Bodily-2", dimension: "Bodily", text: "How confident are you in hands-on activities like labs, repair, or building?", icon: "🛠️" },
+  { id: "Logical-1", dimension: "Logical", text: "How much do you enjoy solving puzzles, equations, or logic challenges?", icon: "🧮" },
+  { id: "Logical-2", dimension: "Logical", text: "How comfortable are you with data patterns, formulas, and step-by-step problem solving?", icon: "📊" },
+  { id: "Spatial-1", dimension: "Spatial", text: "How easy is it for you to mentally rotate shapes or imagine 3D objects?", icon: "🎨" },
+  { id: "Spatial-2", dimension: "Spatial", text: "How good are you at reading maps, diagrams, and visual layouts?", icon: "🧭" },
+  { id: "Interpersonal-1", dimension: "Interpersonal", text: "How well do you understand other people's feelings during teamwork?", icon: "🗣️" },
+  { id: "Interpersonal-2", dimension: "Interpersonal", text: "How comfortable are you leading group discussions or resolving conflicts?", icon: "🤝" },
+  { id: "Intrapersonal-1", dimension: "Intrapersonal", text: "How clearly do you understand your own strengths, weaknesses, and goals?", icon: "🤔" },
+  { id: "Intrapersonal-2", dimension: "Intrapersonal", text: "How disciplined are you in self-study and staying focused without reminders?", icon: "🎯" },
+  { id: "Naturalist-1", dimension: "Naturalist", text: "How interested are you in biology, environment, plants, or animals?", icon: "🌿" },
+  { id: "Naturalist-2", dimension: "Naturalist", text: "How often do you observe nature details and classify living things around you?", icon: "🌱" },
+];
+
+const options = [
+  { value: 1, label: "Not really", emoji: "😴" },
+  { value: 2, label: "A little", emoji: "😐" },
+  { value: 3, label: "So-so", emoji: "🤔" },
+  { value: 4, label: "Pretty good", emoji: "😊" },
+  { value: 5, label: "Very good", emoji: "🔥" },
+];
+
 function SkillsTest() {
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    matricMarks,
-    intermediateMarks,
-    matricStream,
-    intermediateStream,
-  } = useContext(AuthContext);
+  const { matricMarks, intermediateMarks, matricStream, intermediateStream } = useContext(AuthContext);
 
   const academicData = location.state || {};
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [skills, setSkills] = useState({});
+  const [answers, setAnswers] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
 
@@ -37,78 +70,35 @@ function SkillsTest() {
     if (!stateOk && !ctxOk) {
       navigate("/education", { replace: true });
     }
-  }, [
-    location.state,
-    matricStream,
-    intermediateStream,
-    matricMarks,
-    intermediateMarks,
-    navigate,
-  ]);
+  }, [location.state, matricStream, intermediateStream, matricMarks, intermediateMarks, navigate]);
 
-  const questions = [
-    {
-      key: "Linguistic",
-      text: "How good are you at writing or speaking your ideas?",
-      icon: "✍️",
-    },
-    {
-      key: "Musical",
-      text: "How good are you with music, rhythm, or tunes?",
-      icon: "🎵",
-    },
-    {
-      key: "Bodily",
-      text: "How good are you at sports, dance, or body control?",
-      icon: "🏃",
-    },
-    {
-      key: "Logical",
-      text: "How much do you like puzzles, numbers, or logic?",
-      icon: "🧮",
-    },
-    {
-      key: "Spatial",
-      text: "How easy is it for you to picture shapes or 3D objects in your mind?",
-      icon: "🎨",
-    },
-    {
-      key: "Interpersonal",
-      text: "How well do you get along with people and read their feelings?",
-      icon: "🗣️",
-    },
-    {
-      key: "Intrapersonal",
-      text: "How well do you know your own feelings and goals?",
-      icon: "🤔",
-    },
-    {
-      key: "Naturalist",
-      text: "How much do you like nature, animals, or plants?",
-      icon: "🌿",
-    },
-  ];
-
-  const options = [
-    { value: 1, label: "Not really", emoji: "😴" },
-    { value: 2, label: "A little", emoji: "😐" },
-    { value: 3, label: "So-so", emoji: "🤔" },
-    { value: 4, label: "Pretty good", emoji: "😊" },
-    { value: 5, label: "Very good", emoji: "🔥" },
-  ];
-
-  const answeredCount = Object.keys(skills).length;
+  const answeredCount = Object.keys(answers).length;
   const progress = (answeredCount / questions.length) * 100;
 
-  const handleOptionSelect = (value) => {
-    const questionKey = questions[currentQuestion].key;
-    setSkills({
-      ...skills,
-      [questionKey]: value,
+  const aggregateDimensionScores = () => {
+    const grouped = {};
+    questions.forEach((q) => {
+      const value = Number(answers[q.id]);
+      if (!Number.isFinite(value)) return;
+      if (!grouped[q.dimension]) grouped[q.dimension] = [];
+      grouped[q.dimension].push(value);
     });
 
+    const averages = {};
+    DIMENSIONS.forEach((dimension) => {
+      const values = grouped[dimension] || [3];
+      const avg = values.reduce((sum, v) => sum + v, 0) / values.length;
+      averages[dimension] = Math.round(avg);
+    });
+    return averages;
+  };
+
+  const handleOptionSelect = (value) => {
+    const questionId = questions[currentQuestion].id;
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+
     if (currentQuestion < questions.length - 1) {
-      setTimeout(() => setCurrentQuestion(currentQuestion + 1), 280);
+      setTimeout(() => setCurrentQuestion((prev) => prev + 1), 280);
     } else {
       setTimeout(() => setIsCompleted(true), 400);
     }
@@ -117,6 +107,7 @@ function SkillsTest() {
   const handleBack = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
+      setIsCompleted(false);
     }
   };
 
@@ -128,24 +119,23 @@ function SkillsTest() {
   };
 
   const handleSubmit = async () => {
-    if (currentQuestion !== questions.length - 1 || Object.keys(skills).length !== questions.length) {
+    if (currentQuestion !== questions.length - 1 || Object.keys(answers).length !== questions.length) {
       alert("Please pick one answer for every question.");
       return;
     }
 
     setIsSubmitting(true);
-
+    const groupedAverages = aggregateDimensionScores();
     const finalSkills = {};
-    Object.keys(skills).forEach((key) => {
-      finalSkills[key] = convertSkill(skills[key]);
+    Object.keys(groupedAverages).forEach((key) => {
+      finalSkills[key] = convertSkill(groupedAverages[key]);
     });
 
     const finalData = {
       ...academicData,
       ...finalSkills,
       matric_marks: academicData.matric_marks || matricMarks?.[matricStream] || {},
-      intermediate_marks:
-        academicData.intermediate_marks || intermediateMarks?.[intermediateStream] || {},
+      intermediate_marks: academicData.intermediate_marks || intermediateMarks?.[intermediateStream] || {},
       matric_stream: academicData.matric_stream || matricStream || null,
       intermediate_stream: academicData.intermediate_stream || intermediateStream || null,
     };
@@ -153,14 +143,11 @@ function SkillsTest() {
     try {
       const response = await fetch("http://127.0.0.1:5000/predict-career", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(finalData),
       });
 
       const result = await response.json();
-
       if (!result.predicted_career) {
         alert(result.message || "Could not get a career idea. Please try again.");
         setIsSubmitting(false);
@@ -176,7 +163,8 @@ function SkillsTest() {
             topCareers: result.top_careers || [],
             usedSortedPslots: result.used_sorted_pslots,
             fullData: finalData,
-            skillsRaw: skills,
+            skillsRaw: answers,
+            groupedAverages,
             skillsConverted: finalSkills,
           },
         });
@@ -194,17 +182,13 @@ function SkillsTest() {
     <div className="min-h-screen relative overflow-hidden">
       <div className="relative z-10 pt-24 pb-20 px-4">
         <div className="max-w-2xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: -40 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
-          >
+          <motion.div initial={{ opacity: 0, y: -40 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
             <div className="text-6xl mb-6">🧠</div>
             <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-500 bg-clip-text text-transparent mb-4">
-              Skills
+              Deep Skills Assessment
             </h1>
             <p className="text-lg text-white/75 max-w-lg mx-auto mb-6">
-              Tap the line that fits you best. There are no right or wrong answers.
+              We ask more detailed questions so career suggestions match your profile better.
             </p>
             <div className="w-full bg-white/10 backdrop-blur-sm h-2 rounded-full overflow-hidden max-w-xl mx-auto">
               <motion.div
@@ -232,9 +216,7 @@ function SkillsTest() {
               {!isCompleted ? (
                 <>
                   <div className="text-5xl md:text-6xl mb-6 text-center">{currentQ.icon}</div>
-                  <h2 className="text-xl md:text-2xl font-bold text-white text-center mb-8 leading-snug px-1">
-                    {currentQ.text}
-                  </h2>
+                  <h2 className="text-xl md:text-2xl font-bold text-white text-center mb-8 leading-snug px-1">{currentQ.text}</h2>
                   <div className="space-y-4 flex-1 flex flex-col justify-center">
                     {options.map((option, i) => (
                       <motion.button
@@ -257,7 +239,7 @@ function SkillsTest() {
                   <div className="text-7xl mb-8">🎉</div>
                   <p className="text-2xl font-bold text-white mb-4">All done</p>
                   <p className="text-white/70 text-lg mb-10 max-w-md">
-                    Press the button below to see career ideas based on your answers.
+                    Press the button below to see 4 career ideas matched to your academics and detailed answers.
                   </p>
                 </div>
               )}
@@ -282,7 +264,7 @@ function SkillsTest() {
                 {isSubmitting ? (
                   <>
                     <span className="inline-block w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2 align-middle" />
-                    Working…
+                    Working...
                   </>
                 ) : (
                   "See my results"
@@ -291,15 +273,15 @@ function SkillsTest() {
             ) : currentQuestion === questions.length - 1 ? (
               <AnimatedButton
                 onClick={handleSubmit}
-                disabled={isSubmitting || !skills[currentQ.key]}
+                disabled={isSubmitting || !answers[currentQ.id]}
                 className="px-14 py-4 text-lg font-bold bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 rounded-2xl shadow-2xl"
               >
                 Finish and see results
               </AnimatedButton>
             ) : (
               <AnimatedButton
-                disabled={!skills[currentQ.key]}
-                onClick={() => handleOptionSelect(skills[currentQ.key])}
+                disabled={!answers[currentQ.id]}
+                onClick={() => handleOptionSelect(answers[currentQ.id])}
                 className="px-14 py-4 text-lg font-bold bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 rounded-2xl shadow-2xl"
               >
                 Next →

@@ -44,7 +44,7 @@ function StreamSelection() {
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-4 flex flex-col items-center justify-center">
+    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex flex-col items-center justify-center">
       <motion.div
         className="glass-card p-16 max-w-4xl w-full backdrop-blur-xl shadow-2xl career-glow text-center"
         initial={{ opacity: 0, y: 50 }}

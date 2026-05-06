@@ -24,7 +24,6 @@ function Login() {
 
       login(res.data.token, res.data.name);
 
-      // Always open the test from Education (ignore old deep links like /skills).
       navigate("/education", { replace: true });
 
     } catch (err) {
@@ -33,7 +32,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-4 flex items-center justify-center">
+    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}

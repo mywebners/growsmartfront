@@ -4,8 +4,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
-import { ArrowLeft, ClipboardList, Sparkles } from "lucide-react";
+import { ArrowLeft, ClipboardList, Sparkles, X, ChevronDown, ChevronUp } from "lucide-react";
 import { addHistoryEntry, createHistoryEntry } from "../utils/historyStorage";
+import { SKILL_QUESTION_BY_ID } from "../utils/skillsQuestions";
 
 const RANK_STYLES = [
   "from-amber-400 to-orange-500",
@@ -35,6 +36,7 @@ function Result() {
   const hasSavedRef = useRef(false);
 
   const [animateConfetti, setAnimateConfetti] = useState(false);
+  const [openDetailIndex, setOpenDetailIndex] = useState(null);
 
   const rankedCareers = useMemo(() => {
     const rows = Array.isArray(topCareers) ? [...topCareers] : [];
@@ -45,7 +47,7 @@ function Result() {
         blend_confidence: null,
       });
     }
-    return rows.slice(0, 5);
+    return rows.slice(0, 4);
   }, [topCareers, career]);
 
   const handleStartNewTest = () => {
@@ -68,6 +70,7 @@ function Result() {
       topCareers: rankedCareers,
       fullData: data,
       skillsRaw,
+      skillsQuestionMap: SKILL_QUESTION_BY_ID,
       skillsConverted,
       matricInfo: {
         stream: matricStream,
@@ -116,8 +119,8 @@ function Result() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <div className="relative z-10 pt-24 pb-20 px-0">
-        <div className="max-w-3xl mx-auto">
+      <div className="relative z-10 pt-20 sm:pt-24 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4">
+        <div className="max-w-3xl mx-auto w-full">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -141,18 +144,18 @@ function Result() {
               <Sparkles className="w-4 h-4 text-amber-300" />
               Top career matches
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white mb-3 drop-shadow-lg">
+            <h1 className="text-2xl min-[321px]:text-4xl md:text-5xl font-black text-white mb-3 drop-shadow-lg px-1">
               Your best match
             </h1>
             <motion.div
-              className="text-3xl md:text-5xl font-black bg-gradient-to-r from-yellow-300 via-amber-200 to-orange-300 bg-clip-text text-transparent px-6 py-5 rounded-3xl border border-white/20 bg-white/5 backdrop-blur-md inline-block max-w-full"
+              className="text-xl min-[321px]:text-3xl md:text-5xl font-black bg-gradient-to-r from-yellow-300 via-amber-200 to-orange-300 bg-clip-text text-transparent px-4 py-4 sm:px-6 sm:py-5 rounded-2xl sm:rounded-3xl border border-white/20 bg-white/5 backdrop-blur-md inline-block max-w-full break-anywhere text-center"
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ duration: 2.5, repeat: Infinity }}
             >
               {primary}
             </motion.div>
             <p className="text-white/65 text-base md:text-lg mt-6 max-w-xl mx-auto leading-relaxed">
-              Below are up to five ranked suggestions from the model, adjusted for your stream and skills.
+              Below are top career suggestions based on your marks, stream, and brain-skill profile.
             </p>
           </motion.div>
 
@@ -163,32 +166,74 @@ function Result() {
             className="space-y-4 mb-12"
           >
             {rankedCareers.map((row, i) => (
-              <GlassCard
-                key={`${row.career}-${i}`}
-                className="p-5 md:p-6 flex flex-row items-center gap-4 border border-white/15"
-              >
-                <div
-                  className={`shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-black text-white bg-gradient-to-br ${RANK_STYLES[i] || RANK_STYLES[4]} shadow-lg`}
-                >
-                  {i + 1}
+              <GlassCard key={`${row.career}-${i}`} className="p-4 sm:p-5 md:p-6 border border-white/15 !rounded-2xl sm:!rounded-3xl">
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-row items-center gap-3 sm:gap-4 min-w-0">
+                  <div
+                    className={`shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-lg sm:text-xl font-black text-white bg-gradient-to-br ${RANK_STYLES[i] || RANK_STYLES[4]} shadow-lg`}
+                  >
+                    {i + 1}
+                  </div>
+                  <div className="flex-1 min-w-0 text-left">
+                    <p className="text-white font-bold text-base sm:text-lg md:text-xl break-anywhere">{row.career}</p>
+                    <p className="text-white/55 text-xs sm:text-sm mt-1">Rank #{i + 1}</p>
+                  </div>
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 w-full">
+                  <AnimatedButton
+                    onClick={() => setOpenDetailIndex(openDetailIndex === i ? null : i)}
+                    className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold bg-white/10 hover:bg-white/20 border border-white/25 text-white rounded-xl inline-flex items-center gap-2"
+                  >
+                    Detail
+                    {openDetailIndex === i ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </AnimatedButton>
+                  <AnimatedButton
+                    onClick={() =>
+                      navigate("/career-insights", {
+                        state: { career: row.career },
+                      })
+                    }
+                    className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold bg-emerald-500/25 hover:bg-emerald-500/35 border border-emerald-300/40 text-white rounded-xl"
+                  >
+                    Pakistan Guide
+                  </AnimatedButton>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0 text-left">
-                  <p className="text-white font-bold text-lg md:text-xl truncate">{row.career}</p>
-                  <p className="text-white/55 text-sm mt-1">
-                    {row.blend_confidence != null && (
-                      <span className="text-emerald-300/95">{row.blend_confidence}% adjusted fit</span>
-                    )}
-                    {row.blend_confidence != null && row.confidence != null && (
-                      <span className="mx-2 text-white/30">·</span>
-                    )}
-                    {row.confidence != null && (
-                      <span>{row.confidence}% model</span>
-                    )}
-                    {row.blend_confidence == null && row.confidence == null && (
-                      <span>Rank #{i + 1}</span>
-                    )}
-                  </p>
-                </div>
+
+                <AnimatePresence initial={false}>
+                  {openDetailIndex === i && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0, y: -6 }}
+                      animate={{ opacity: 1, height: "auto", y: 0 }}
+                      exit={{ opacity: 0, height: 0, y: -6 }}
+                      transition={{ duration: 0.25 }}
+                      className="mt-4 overflow-hidden"
+                    >
+                      <div className="relative rounded-2xl border border-emerald-300/30 bg-emerald-500/10 p-4 text-left">
+                        <button
+                          type="button"
+                          onClick={() => setOpenDetailIndex(null)}
+                          className="absolute top-2 right-2 p-1 rounded-md text-white/70 hover:text-white hover:bg-white/10"
+                          aria-label="Close details"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                        <p className="text-emerald-200 font-semibold mb-2">Why this career was predicted</p>
+                        {(row.why || []).length > 0 ? (
+                          <ul className="text-white/85 text-sm leading-relaxed space-y-1 pr-8">
+                            {(row.why || []).map((point, idx) => (
+                              <li key={`${row.career}-reason-${idx}`}>- {point}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p className="text-white/80 text-sm pr-8">
+                            This career matches your combined academic and brain-skill profile.
+                          </p>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </GlassCard>
             ))}
           </motion.div>
@@ -219,7 +264,7 @@ function Result() {
       <button
         type="button"
         onClick={() => navigate(-1)}
-        className="fixed top-24 left-4 z-30 p-3 rounded-full glass-card hover:bg-white/20 transition-all"
+        className="fixed top-16 sm:top-24 left-2 sm:left-4 z-30 p-2.5 sm:p-3 rounded-full glass-card hover:bg-white/20 transition-all max-[320px]:top-14"
         aria-label="Go back"
       >
         <ArrowLeft className="w-5 h-5" />

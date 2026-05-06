@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
+import { SKILL_QUESTIONS } from "../utils/skillsQuestions";
 
 const DIMENSIONS = [
   "Linguistic",
@@ -16,24 +17,17 @@ const DIMENSIONS = [
   "Naturalist",
 ];
 
-const questions = [
-  { id: "Linguistic-1", dimension: "Linguistic", text: "How confident are you in writing clear essays, stories, or reports?", icon: "✍️" },
-  { id: "Linguistic-2", dimension: "Linguistic", text: "How well can you explain difficult topics in your own words?", icon: "🗨️" },
-  { id: "Musical-1", dimension: "Musical", text: "How easily do you notice rhythm, tone, or beat changes in sounds?", icon: "🎵" },
-  { id: "Musical-2", dimension: "Musical", text: "How strong is your memory for melodies or tunes after hearing them?", icon: "🎧" },
-  { id: "Bodily-1", dimension: "Bodily", text: "How good is your body coordination in sports, dance, or practical tasks?", icon: "🏃" },
-  { id: "Bodily-2", dimension: "Bodily", text: "How confident are you in hands-on activities like labs, repair, or building?", icon: "🛠️" },
-  { id: "Logical-1", dimension: "Logical", text: "How much do you enjoy solving puzzles, equations, or logic challenges?", icon: "🧮" },
-  { id: "Logical-2", dimension: "Logical", text: "How comfortable are you with data patterns, formulas, and step-by-step problem solving?", icon: "📊" },
-  { id: "Spatial-1", dimension: "Spatial", text: "How easy is it for you to mentally rotate shapes or imagine 3D objects?", icon: "🎨" },
-  { id: "Spatial-2", dimension: "Spatial", text: "How good are you at reading maps, diagrams, and visual layouts?", icon: "🧭" },
-  { id: "Interpersonal-1", dimension: "Interpersonal", text: "How well do you understand other people's feelings during teamwork?", icon: "🗣️" },
-  { id: "Interpersonal-2", dimension: "Interpersonal", text: "How comfortable are you leading group discussions or resolving conflicts?", icon: "🤝" },
-  { id: "Intrapersonal-1", dimension: "Intrapersonal", text: "How clearly do you understand your own strengths, weaknesses, and goals?", icon: "🤔" },
-  { id: "Intrapersonal-2", dimension: "Intrapersonal", text: "How disciplined are you in self-study and staying focused without reminders?", icon: "🎯" },
-  { id: "Naturalist-1", dimension: "Naturalist", text: "How interested are you in biology, environment, plants, or animals?", icon: "🌿" },
-  { id: "Naturalist-2", dimension: "Naturalist", text: "How often do you observe nature details and classify living things around you?", icon: "🌱" },
-];
+const questions = SKILL_QUESTIONS.map((q) => ({
+  ...q,
+  icon:
+    q.dimension === "Linguistic" ? "✍️" :
+    q.dimension === "Musical" ? "🎵" :
+    q.dimension === "Bodily" ? "🏃" :
+    q.dimension === "Logical" ? "🧮" :
+    q.dimension === "Spatial" ? "🧭" :
+    q.dimension === "Interpersonal" ? "🤝" :
+    q.dimension === "Intrapersonal" ? "🎯" : "🌿",
+}));
 
 const options = [
   { value: 1, label: "Not really", emoji: "😴" },
@@ -180,14 +174,14 @@ function SkillsTest() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <div className="relative z-10 pt-24 pb-20 px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="relative z-10 pt-20 sm:pt-24 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4">
+        <div className="max-w-2xl mx-auto w-full">
           <motion.div initial={{ opacity: 0, y: -40 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <div className="text-6xl mb-6">🧠</div>
-            <h1 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-500 bg-clip-text text-transparent mb-4">
+            <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">🧠</div>
+            <h1 className="text-2xl min-[321px]:text-4xl md:text-5xl font-black bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-500 bg-clip-text text-transparent mb-3 sm:mb-4 px-1 break-anywhere">
               Deep Skills Assessment
             </h1>
-            <p className="text-lg text-white/75 max-w-lg mx-auto mb-6">
+            <p className="text-base sm:text-lg text-white/75 max-w-lg mx-auto mb-6 px-1">
               We ask more detailed questions so career suggestions match your profile better.
             </p>
             <div className="w-full bg-white/10 backdrop-blur-sm h-2 rounded-full overflow-hidden max-w-xl mx-auto">

@@ -5,6 +5,7 @@ import { ArrowLeft, RotateCcw } from "lucide-react";
 import { getHistoryItems } from "../utils/historyStorage";
 import { AuthContext } from "../context/AuthContext";
 import AnimatedButton from "../components/AnimatedButton";
+import { SKILL_OPTION_LABELS, SKILL_QUESTION_BY_ID } from "../utils/skillsQuestions";
 
 function HistoryDetail() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ function HistoryDetail() {
 
   if (!record) {
     return (
-      <div className="min-h-screen pt-32 px-4">
+      <div className="min-h-screen pt-24 sm:pt-28 px-3 max-[320px]:px-2 sm:px-4">
         <div className="max-w-3xl mx-auto glass-card p-10 text-center">
           <h2 className="text-3xl font-bold mb-4 text-white">Record Not Found</h2>
           <button className="btn-career px-8 py-3" onClick={() => navigate("/history")}>
@@ -47,11 +48,16 @@ function HistoryDetail() {
 
   const matricMarks = Object.entries(record?.matric?.marks || {});
   const intermediateMarks = Object.entries(record?.intermediate?.marks || {});
-  const skillsRaw = Object.entries(record?.skillsRaw || {});
+  const skillsRaw = Object.entries(record?.skillsRaw || {}).map(([key, value]) => {
+    const questionMap = record?.skillsQuestionMap || {};
+    const questionText = questionMap[key] || SKILL_QUESTION_BY_ID[key] || key;
+    const answerLabel = SKILL_OPTION_LABELS[value] || String(value);
+    return [questionText, answerLabel];
+  });
   const topCareers = Array.isArray(record.topCareers) ? record.topCareers : [];
 
   return (
-    <div className="min-h-screen pt-28 pb-20 px-4">
+    <div className="min-h-screen pt-24 sm:pt-28 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4">
       <div className="max-w-5xl mx-auto space-y-8">
         <motion.div
           initial={{ opacity: 0, y: -12 }}
@@ -96,11 +102,6 @@ function HistoryDetail() {
                   <span className="text-white font-medium">
                     <span className="text-emerald-400/90 mr-2">{i + 1}.</span>
                     {row.career}
-                  </span>
-                  <span className="text-white/60 text-sm">
-                    {row.blend_confidence != null && `${row.blend_confidence}% fit`}
-                    {row.blend_confidence != null && row.confidence != null && " · "}
-                    {row.confidence != null && `${row.confidence}% model`}
                   </span>
                 </li>
               ))}
@@ -147,9 +148,9 @@ function HistoryDetail() {
           <div className="grid md:grid-cols-2 gap-3">
             {skillsRaw.length > 0 ? (
               skillsRaw.map(([question, answer]) => (
-                <div key={question} className="bg-white/10 rounded-xl px-4 py-3 flex justify-between text-white">
-                  <span>{question}</span>
-                  <span className="font-semibold">{String(answer)}</span>
+                <div key={question} className="bg-white/10 rounded-xl px-4 py-3 flex justify-between gap-4 text-white">
+                  <span className="text-white/90">{question}</span>
+                  <span className="font-semibold shrink-0">{answer}</span>
                 </div>
               ))
             ) : (

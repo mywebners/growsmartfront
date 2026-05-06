@@ -30,7 +30,7 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-4 flex items-center justify-center">
+    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}

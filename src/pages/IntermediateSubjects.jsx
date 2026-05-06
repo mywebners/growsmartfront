@@ -31,7 +31,6 @@ function IntermediateSubjects() {
 
   const subjects = subjectsMap[stream] || [];
 
-  // Load saved marks on mount
   useEffect(() => {
     if (stream && intermediateMarks[stream]) {
       setMarks(intermediateMarks[stream]);
@@ -45,7 +44,6 @@ function IntermediateSubjects() {
       [name]: value
     };
     setMarks(newMarks);
-    // Save immediately to context
     setIntermediateMarks(stream, newMarks);
   };
 
@@ -97,19 +95,19 @@ function IntermediateSubjects() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <div className="relative z-10 pt-24 pb-20 px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="relative z-10 pt-20 sm:pt-24 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4">
+        <div className="max-w-2xl mx-auto w-full">
           
           <motion.div 
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-16"
           >
-            <div className="text-6xl mb-6">🎓</div>
-            <h1 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-emerald-400 via-green-400 to-teal-500 bg-clip-text text-transparent mb-4">
+            <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">🎓</div>
+            <h1 className="text-2xl min-[321px]:text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-emerald-400 via-green-400 to-teal-500 bg-clip-text text-transparent mb-3 sm:mb-4 px-1 break-anywhere">
               Intermediate Subjects
             </h1>
-            <p className="text-xl text-white/70 max-w-lg mx-auto">
+            <p className="text-base sm:text-xl text-white/70 max-w-lg mx-auto px-1">
               Type your <span className="font-semibold text-emerald-300">percentage</span> for each subject (
               {stream?.replace("-", " ")}). From <span className="text-emerald-300 font-semibold">{MARK_MIN}</span> to{" "}
               <span className="text-emerald-300 font-semibold">{MARK_MAX}</span>.

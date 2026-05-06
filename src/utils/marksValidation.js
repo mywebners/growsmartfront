@@ -1,4 +1,3 @@
-/** Marks are stored as percentage: pass (33) up to best (100). */
 export const MARK_MIN = 33;
 export const MARK_MAX = 100;
 

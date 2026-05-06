@@ -26,7 +26,7 @@ function EducationLevel() {
   };
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-4 flex flex-col items-center justify-center">
+    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex flex-col items-center justify-center">
       <motion.div
         className="glass-card p-16 max-w-2xl w-full backdrop-blur-xl shadow-2xl career-glow text-center"
         initial={{ opacity: 0, y: 50 }}
@@ -55,7 +55,6 @@ function EducationLevel() {
               : "max-w-sm grid-cols-1"
           }`}
         >
-          {/* Matric — same min size as Intermediate when both show */}
           <motion.button
             type="button"
             className="group glass-card p-10 sm:p-12 hover:bg-white/20 backdrop-blur-xl border-2 border-white/30 hover:border-blue-400 hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-500 relative overflow-hidden w-full min-h-[260px] sm:min-h-[288px] flex flex-col items-center justify-center text-center"

@@ -12,7 +12,6 @@ const navigate = useNavigate();
   const userData = localStorage.getItem("user");
   let user = userData || null;
 
-  // Backward compatibility: if old data was stored as JSON, parse it safely.
   if (userData && userData.startsWith("{")) {
     try {
       const parsedUser = JSON.parse(userData);
@@ -25,7 +24,7 @@ const navigate = useNavigate();
   const handleStart = () => {
     if (!user) {
       alert("Please login first to start test");
-      navigate("/login"); // login page par bhejo
+      navigate("/login");
       return;
     }
 
@@ -36,7 +35,7 @@ const navigate = useNavigate();
   const hasHistory = user ? getHistoryItems(user).length > 0 : false;
 
   return (
-    <div className="min-h-screen pt-28 md:pt-36 pb-14 px-4 md:px-6 flex flex-col items-center justify-center text-center">
+    <div className="min-h-screen pt-24 sm:pt-28 md:pt-36 pb-12 sm:pb-14 px-3 max-[320px]:px-2 sm:px-4 md:px-6 flex flex-col items-center justify-center text-center">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}

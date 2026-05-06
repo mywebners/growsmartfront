@@ -22,7 +22,6 @@ function MatricSubjects() {
 
   const subjects = subjectsMap[stream] || [];
 
-  // Load saved marks on mount
   useEffect(() => {
     if (stream && matricMarks[stream]) {
       setMarks(matricMarks[stream]);
@@ -36,7 +35,6 @@ function MatricSubjects() {
       [name]: value
     };
     setMarks(newMarks);
-    // Save immediately to context
     setMatricMarks(stream, newMarks);
   };
 
@@ -62,13 +60,9 @@ function MatricSubjects() {
       academicData[`P${index + 1}`] = convertPerformance(marks[sub]);
     });
 
-    console.log("Matric Data:", academicData);
-
     setMatricData(academicData);
     setMatricCompleted(true);
     setMatricStream(stream);
-
-    // Marks already saved via onChange
 
     navigate("/education");
   };
@@ -82,19 +76,19 @@ function MatricSubjects() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <div className="relative z-10 pt-24 pb-20 px-4">
-        <div className="max-w-2xl mx-auto">
+      <div className="relative z-10 pt-20 sm:pt-24 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4">
+        <div className="max-w-2xl mx-auto w-full">
           
           <motion.div 
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-16"
           >
-            <div className="text-6xl mb-6">📚</div>
-            <h3 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-500 bg-clip-text text-transparent mb-4">
+            <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">📚</div>
+            <h3 className="text-2xl min-[321px]:text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-500 bg-clip-text text-transparent mb-3 sm:mb-4 px-1 break-anywhere">
               Matric Subjects
             </h3>
-            <p className="text-xl text-white/70 max-w-lg mx-auto">
+            <p className="text-base sm:text-xl text-white/70 max-w-lg mx-auto px-1">
               Type your <span className="font-semibold text-emerald-300">percentage</span> for each subject (
               {stream?.toUpperCase()}). Use numbers from <span className="text-emerald-300 font-semibold">{MARK_MIN}</span>{" "}
               (pass) to <span className="text-emerald-300 font-semibold">{MARK_MAX}</span> (full marks).

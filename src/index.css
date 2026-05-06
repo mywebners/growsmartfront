@@ -82,6 +82,13 @@
 
   .page-shell {
     position: relative;
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+    padding-right: max(0.5rem, env(safe-area-inset-right));
+  }
+
+  .break-anywhere {
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .page-shell::before,
@@ -112,7 +119,6 @@
   }
 }
 
-/* 3D background: fixed left ~50% of viewport — diagram lives in this band */
 .three-bg-wrap {
   position: fixed;
   top: 0;
@@ -131,7 +137,6 @@
   display: block;
 }
 
-/* Main app content sits in the right 50% (aligned with theme) */
 .layout-with-left-3d {
   padding-left: 50vw;
   padding-right: clamp(0.75rem, 2vw, 1.5rem);
@@ -139,9 +144,26 @@
 }
 
 @media (max-width: 640px) {
+  .three-bg-wrap {
+    width: 100vw;
+    opacity: 0.45;
+  }
+
   .layout-with-left-3d {
     padding-left: 50vw;
     padding-right: 0.5rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .glass-card {
+    border-radius: 1rem;
+    padding: 0.85rem !important;
+  }
+
+  .btn-career {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
   }
 }
 
@@ -167,6 +189,12 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (max-width: 320px) {
+  html {
+    font-size: 15px;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -176,7 +204,6 @@ body {
   font-family: 'Outfit', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Same base as 3D panel (#0d1026) — centered glows so left/right are not two different colors */
   background-color: #0d1026;
   background-attachment: fixed;
   color: #ffffff;
@@ -212,7 +239,6 @@ code {
     monospace;
 }
 
-/* Custom scrollbar */
 *::-webkit-scrollbar {
   width: 10px;
 }
@@ -236,7 +262,6 @@ code {
    scrollbar-color: #a78bfa #0b1021;
  }
 
-/* Loader 3D ring animation */
 .loader-3d {
   position: relative;
   width: 120px;

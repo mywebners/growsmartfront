@@ -9,7 +9,6 @@ function IntermediateStream() {
   const location = useLocation();
   const { matricData, matricStream } = useContext(AuthContext);
   const { reviewingIntermediate, stream: reviewStream } = location.state || {};
-  // Fallback to location.state for backward compatibility
   const finalMatricData = matricData || location.state || {};
   const currentMatricStream = finalMatricData.stream || matricStream;
 
@@ -61,7 +60,6 @@ function IntermediateStream() {
 
   const allowedStreams = getAllowedStreams(currentMatricStream);
 
-  console.log("Matric Stream:", currentMatricStream, "Allowed Intermediate:", allowedStreams.map(s => s.id));
   const allowedStreamIds = allowedStreams.map(s => s.id);
 
   const allStreams = [
@@ -96,6 +94,7 @@ function IntermediateStream() {
   ];
 
   const handleStreamSelect = (streamId) => {
+    if (!allowedStreamIds.includes(streamId)) return;
     if (isReviewMode && streamId !== reviewStream) return;
     navigate("/intermediate-subjects", {
       state: { ...finalMatricData, stream: streamId }
@@ -104,22 +103,20 @@ function IntermediateStream() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <div className="relative z-10 pt-24 pb-20 px-0">
-        <div className="max-w-4xl mx-auto">
-          
-          {/* Header */}
+      <div className="relative z-10 pt-20 sm:pt-24 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4">
+        <div className="max-w-4xl mx-auto w-full">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-20"
           >
-            <div className={`text-7xl mb-8 animate-bounce ${isReviewMode ? 'w-32 h-32 bg-gradient-to-br from-emerald-500 to-green-600 rounded-3xl flex items-center justify-center shadow-2xl career-glow mx-auto' : ''}`}>
+            <div className={`text-5xl sm:text-7xl mb-6 sm:mb-8 animate-bounce ${isReviewMode ? 'w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-emerald-500 to-green-600 rounded-3xl flex items-center justify-center shadow-2xl career-glow mx-auto' : ''}`}>
               {isReviewMode ? '✏️' : '🎓'}
             </div>
-            <h1 className="text-5xl md:text-6xl font-black bg-gradient-to-r from-white to-white/50 bg-clip-text text-transparent mb-6">
+            <h1 className="text-2xl min-[321px]:text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-white to-white/50 bg-clip-text text-transparent mb-4 sm:mb-6 px-1 break-anywhere">
               {isReviewMode ? 'Review Intermediate Stream' : 'Choose Intermediate Stream'}
             </h1>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed px-1">
               {isReviewMode ? (
                 <>Edit marks for your <span className="font-bold text-emerald-400">{reviewStream?.replace('-', ' ').toUpperCase()}</span> stream</>
               ) : (
@@ -129,11 +126,11 @@ function IntermediateStream() {
           </motion.div>
 
           {/* Stream Cards Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-8 max-w-6xl mx-auto">
             {allStreams.map((stream, index) => {
               const isSelected = isReviewMode && stream.id === reviewStream;
               const isMatricRestricted = !allowedStreamIds.includes(stream.id);
-              const isDisabled = isReviewMode && !isSelected || isMatricRestricted;
+              const isDisabled = (isReviewMode && !isSelected) || isMatricRestricted;
               return (
                 <motion.div
                   key={stream.id}
@@ -150,31 +147,32 @@ function IntermediateStream() {
                 >
                   <GlassCard 
                     className={`
-                      h-80 cursor-pointer group relative overflow-hidden transition-all duration-500
+                      min-h-[14rem] sm:min-h-[16rem] md:h-80 cursor-pointer group relative overflow-hidden transition-all duration-500
                       ${isSelected 
                         ? 'ring-4 ring-emerald-400/50 shadow-2xl shadow-emerald-500/50 cursor-pointer border-emerald-400 bg-emerald-500/20' 
                         : isDisabled 
-                          ? 'opacity-50 cursor-not-allowed hover:opacity-50 hover:scale-100 hover:shadow-none border-gray-500/50' 
+                          ? 'opacity-50 cursor-not-allowed hover:opacity-50 hover:scale-100 hover:shadow-none border-gray-500/50 pointer-events-none' 
                           : 'hover:bg-white/20 hover:border-emerald-400/50 hover:shadow-2xl'
                       }`}
-                    onClick={() => handleStreamSelect(stream.id)}
+                    onClick={isDisabled ? undefined : () => handleStreamSelect(stream.id)}
+                    aria-disabled={isDisabled}
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${stream.color} opacity-20 group-hover:opacity-30 transition-opacity duration-500 ${isDisabled ? 'opacity-10' : ''}`}></div>
                     
-                    <div className="relative z-10 flex flex-col items-center justify-center h-full p-8 text-center">
+                    <div className="relative z-10 flex flex-col items-center justify-center min-h-[inherit] h-full p-5 sm:p-8 text-center">
                       <motion.div 
-                        className="text-6xl mb-6 transition-transform duration-300 group-hover:scale-110"
+                        className="text-4xl sm:text-6xl mb-4 sm:mb-6 transition-transform duration-300 group-hover:scale-110"
                         animate={isDisabled ? {} : { rotate: [0, 10, -10, 0] }}
                         transition={isDisabled ? {} : { duration: 3, repeat: Infinity }}
                       >
                         {stream.icon}
                       </motion.div>
                       
-                      <h3 className={`text-3xl font-black mb-4 drop-shadow-lg transition-colors ${isSelected ? 'text-emerald-300' : isDisabled ? 'text-white/60' : 'text-white'}`}>
+                      <h3 className={`text-xl sm:text-2xl md:text-3xl font-black mb-3 sm:mb-4 drop-shadow-lg transition-colors break-anywhere ${isSelected ? 'text-emerald-300' : isDisabled ? 'text-white/60' : 'text-white'}`}>
                         {stream.title}
                       </h3>
                       
-                      <p className={`text-lg mb-8 font-medium transition-opacity ${isDisabled ? 'text-white/40' : 'text-white/90'}`}>
+                      <p className={`text-sm sm:text-lg mb-6 sm:mb-8 font-medium transition-opacity ${isDisabled ? 'text-white/40' : 'text-white/90'}`}>
                         {isSelected ? 'Click to Review/Edit Marks' : stream.subtitle}
                         {isMatricRestricted && (
                           <span className="block mt-2 px-3 py-1 bg-red-500/80 text-xs rounded-full font-bold animate-pulse">
@@ -202,8 +200,7 @@ function IntermediateStream() {
                         SELECTED
                       </div>
                     )}
-                    
-                    {/* Selection glow */}
+
                     <motion.div 
                       className={`absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 opacity-0 blur-xl scale-150 ${isSelected ? '' : 'hidden'}`}
                       animate={isSelected ? { 

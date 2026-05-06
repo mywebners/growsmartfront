@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion'; // Will add later if needed, fallback GSAP
+import { motion } from 'framer-motion';
 
 const GlassCard = ({ children, className = '', onHover, ...props }) => {
   return (

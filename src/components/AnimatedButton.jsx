@@ -9,7 +9,6 @@ const AnimatedButton = ({ children, className = 'btn-career', onClick, ...props 
     const button = buttonRef.current;
     if (!button) return;
 
-    // GSAP hover animation
     const tl = gsap.timeline({ paused: true });
     tl.to(button, {
       scale: 1.05,

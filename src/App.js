@@ -18,9 +18,9 @@ import IntermediateSubjects from "./pages/IntermediateSubjects";
 import SkillsTest from "./pages/SkillsTest";
 import Result from "./pages/Result";
 
-// 🔥 NEW IMPORT
 import History from "./pages/History";
 import HistoryDetail from "./pages/HistoryDetail";
+import CareerInsights from "./pages/CareerInsights";
 
 import Scene3D from './components/3DCanvas';
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -35,13 +35,11 @@ function AppLayout() {
       {!shouldHideNavbar && <Navbar />}
 
       <Routes>
-        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* 🔒 Protected Routes */}
         <Route path="/education" element={
           <ProtectedRoute><EducationLevel /></ProtectedRoute>
         } />
@@ -70,12 +68,14 @@ function AppLayout() {
           <ProtectedRoute><Result /></ProtectedRoute>
         } />
 
-        {/* 🔥 NEW ROUTE */}
         <Route path="/history" element={
           <ProtectedRoute><History /></ProtectedRoute>
         } />
         <Route path="/history/:id" element={
           <ProtectedRoute><HistoryDetail /></ProtectedRoute>
+        } />
+        <Route path="/career-insights" element={
+          <ProtectedRoute><CareerInsights /></ProtectedRoute>
         } />
       </Routes>
     </>

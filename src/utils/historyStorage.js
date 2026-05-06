@@ -26,7 +26,17 @@ export const saveHistoryItems = (user, items) => {
   localStorage.setItem(key, JSON.stringify(items));
 };
 
-export const createHistoryEntry = ({ user, career, topCareers, fullData, skillsRaw, skillsConverted, matricInfo, intermediateInfo }) => {
+export const createHistoryEntry = ({
+  user,
+  career,
+  topCareers,
+  fullData,
+  skillsRaw,
+  skillsQuestionMap,
+  skillsConverted,
+  matricInfo,
+  intermediateInfo
+}) => {
   const now = new Date();
   const id = `${now.getTime()}-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -37,6 +47,7 @@ export const createHistoryEntry = ({ user, career, topCareers, fullData, skillsR
     topCareers: topCareers || [],
     fullData: fullData || {},
     skillsRaw: skillsRaw || {},
+    skillsQuestionMap: skillsQuestionMap || {},
     skillsConverted: skillsConverted || {},
     matric: matricInfo || {},
     intermediate: intermediateInfo || {},
@@ -51,4 +62,11 @@ export const addHistoryEntry = (user, entry) => {
   );
   saveHistoryItems(user, updated);
   return updated;
+};
+
+export const deleteHistoryEntry = (user, id) => {
+  const cur = getHistoryItems(user);
+  const next = cur.filter((row) => row.id !== id);
+  saveHistoryItems(user, next);
+  return next;
 };

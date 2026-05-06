@@ -2,7 +2,6 @@ import React, { useMemo, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-/** Same base as body — fills left ~50vw so no “two-tone” seam with page background */
 const BG_BOTTOM = '#0d1026';
 const FOG_COLOR = '#0d1026';
 
@@ -10,7 +9,6 @@ function makeTetraData() {
   const items = [];
   const rnd = (a, b) => a + Math.random() * (b - a);
 
-  /* Slightly looser layout + faster spin (readability) set in TetrahedronMesh */
   for (let i = 0; i < 46; i += 1) {
     items.push({
       base: new THREE.Vector3(
@@ -113,7 +111,6 @@ function SceneContent() {
     () => tetraData.map((d) => d.base.clone()),
     [tetraData]
   );
-  /* Lower max distance = only nearby nodes link → shapes feel a bit more “apart” */
   const pairs = useMemo(() => buildPairs(bases, 2.72), [bases]);
 
   return (

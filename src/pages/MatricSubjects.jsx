@@ -10,7 +10,18 @@ function MatricSubjects() {
   const navigate = useNavigate();
   const location = useLocation();
   const { stream } = location.state || {};
-  const { setMatricData, setMatricCompleted, matricMarks, setMatricMarks, setMatricStream } = useContext(AuthContext);
+  const {
+    setMatricData,
+    setMatricCompleted,
+    matricMarks,
+    setMatricMarks,
+    setMatricStream,
+    guidanceType,
+    studyGoal,
+    jobsGoal,
+  } = useContext(AuthContext);
+  const isStudyMode = guidanceType === "study";
+  const isJobsMode = guidanceType === "jobs";
 
   const [marks, setMarks] = useState({});
 
@@ -63,6 +74,23 @@ function MatricSubjects() {
     setMatricData(academicData);
     setMatricCompleted(true);
     setMatricStream(stream);
+
+    if (isStudyMode && studyGoal === "inter") {
+      navigate("/study/result", { replace: true });
+      return;
+    }
+    if (isStudyMode && studyGoal === "bachelor") {
+      navigate("/intermediate-stream", { replace: true });
+      return;
+    }
+    if (isJobsMode && jobsGoal === "matric") {
+      navigate("/jobs/result", { replace: true });
+      return;
+    }
+    if (isJobsMode && (jobsGoal === "inter" || jobsGoal === "bachelor")) {
+      navigate("/intermediate-stream", { replace: true });
+      return;
+    }
 
     navigate("/education");
   };
@@ -153,7 +181,15 @@ function MatricSubjects() {
               disabled={filledCount !== subjects.length || !allMarksValid}
               className="px-16 py-6 text-xl font-bold bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 shadow-2xl disabled:opacity-40 disabled:pointer-events-none"
             >
-              Save and go to Intermediate
+              {isStudyMode && studyGoal === "inter"
+                ? "See Inter recommendations"
+                : isStudyMode && studyGoal === "bachelor"
+                  ? "Next: Intermediate details"
+                  : isJobsMode && jobsGoal === "matric"
+                    ? "Find jobs I can apply for"
+                    : isJobsMode
+                      ? "Next: Intermediate details"
+                      : "Save and go to Intermediate"}
             </AnimatedButton>
           </motion.div>
         </div>

@@ -7,7 +7,8 @@ import GlassCard from "../components/GlassCard";
 function IntermediateStream() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { matricData, matricStream } = useContext(AuthContext);
+  const { matricData, matricStream, guidanceType, studyGoal } = useContext(AuthContext);
+  const isStudyBachelor = guidanceType === "study" && studyGoal === "bachelor";
   const { reviewingIntermediate, stream: reviewStream } = location.state || {};
   const finalMatricData = matricData || location.state || {};
   const currentMatricStream = finalMatricData.stream || matricStream;
@@ -114,11 +115,17 @@ function IntermediateStream() {
               {isReviewMode ? '✏️' : '🎓'}
             </div>
             <h1 className="text-2xl min-[321px]:text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-white to-white/50 bg-clip-text text-transparent mb-4 sm:mb-6 px-1 break-anywhere">
-              {isReviewMode ? 'Review Intermediate Stream' : 'Choose Intermediate Stream'}
+              {isReviewMode
+                ? "Review Intermediate Stream"
+                : isStudyBachelor
+                  ? "Which Intermediate did you study?"
+                  : "Choose Intermediate Stream"}
             </h1>
             <p className="text-base sm:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed px-1">
               {isReviewMode ? (
                 <>Edit marks for your <span className="font-bold text-emerald-400">{reviewStream?.replace('-', ' ').toUpperCase()}</span> stream</>
+              ) : isStudyBachelor ? (
+                "Pick the Intermediate stream you already completed — then enter marks so we can rank Bachelor options"
               ) : (
                 "Select the stream that matches your Matric performance and career interests"
               )}

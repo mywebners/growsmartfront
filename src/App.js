@@ -21,6 +21,13 @@ import Result from "./pages/Result";
 import History from "./pages/History";
 import HistoryDetail from "./pages/HistoryDetail";
 import CareerInsights from "./pages/CareerInsights";
+import GuidanceHub from "./pages/GuidanceHub";
+import StudyGoal from "./pages/StudyGoal";
+import StudyResult from "./pages/StudyResult";
+import JobsGuidance from "./pages/JobsGuidance";
+import CareerScope from "./pages/CareerScope";
+import JobsBachelor from "./pages/JobsBachelor";
+import JobsResult from "./pages/JobsResult";
 
 import Scene3D from './components/3DCanvas';
 import LoadingSpinner from "./components/LoadingSpinner";
@@ -39,6 +46,25 @@ function AppLayout() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        <Route path="/guidance" element={
+          <ProtectedRoute><GuidanceHub /></ProtectedRoute>
+        } />
+        <Route path="/study/goal" element={
+          <ProtectedRoute><StudyGoal /></ProtectedRoute>
+        } />
+        <Route path="/study/result" element={
+          <ProtectedRoute><StudyResult /></ProtectedRoute>
+        } />
+        <Route path="/jobs-guidance" element={
+          <ProtectedRoute><JobsGuidance /></ProtectedRoute>
+        } />
+        <Route path="/jobs/bachelor" element={
+          <ProtectedRoute><JobsBachelor /></ProtectedRoute>
+        } />
+        <Route path="/jobs/result" element={
+          <ProtectedRoute><JobsResult /></ProtectedRoute>
+        } />
 
         <Route path="/education" element={
           <ProtectedRoute><EducationLevel /></ProtectedRoute>
@@ -76,6 +102,9 @@ function AppLayout() {
         } />
         <Route path="/career-insights" element={
           <ProtectedRoute><CareerInsights /></ProtectedRoute>
+        } />
+        <Route path="/career-scope" element={
+          <ProtectedRoute><CareerScope /></ProtectedRoute>
         } />
       </Routes>
     </>

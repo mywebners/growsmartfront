@@ -36,6 +36,15 @@ export const AuthProvider = ({ children }) => {
   const [intermediateStream, setIntermediateStreamState] = useState(() =>
     localStorage.getItem("intermediateStream") || null
   );
+  const [guidanceType, setGuidanceTypeState] = useState(
+    () => localStorage.getItem("guidanceType") || null
+  );
+  const [studyGoal, setStudyGoalState] = useState(
+    () => localStorage.getItem("studyGoal") || null
+  );
+  const [jobsGoal, setJobsGoalState] = useState(
+    () => localStorage.getItem("jobsGoal") || null
+  );
 
   const login = (tokenValue, name) => {
     setToken(tokenValue);
@@ -54,6 +63,9 @@ export const AuthProvider = ({ children }) => {
     setIntermediateMarksState({});
     setMatricStreamState(null);
     setIntermediateStreamState(null);
+    setGuidanceTypeState(null);
+    setStudyGoalState(null);
+    setJobsGoalState(null);
 
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -64,6 +76,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("intermediateMarks");
     localStorage.removeItem("matricStream");
     localStorage.removeItem("intermediateStream");
+    localStorage.removeItem("guidanceType");
+    localStorage.removeItem("studyGoal");
+    localStorage.removeItem("jobsGoal");
   };
 
   const setEducationLevel = (level) => {
@@ -115,6 +130,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const setGuidanceType = (type) => {
+    setGuidanceTypeState(type);
+    if (type) {
+      localStorage.setItem("guidanceType", type);
+    } else {
+      localStorage.removeItem("guidanceType");
+    }
+  };
+
+  const setStudyGoal = (goal) => {
+    setStudyGoalState(goal);
+    if (goal) {
+      localStorage.setItem("studyGoal", goal);
+    } else {
+      localStorage.removeItem("studyGoal");
+    }
+  };
+
+  const setJobsGoal = (goal) => {
+    setJobsGoalState(goal);
+    if (goal) {
+      localStorage.setItem("jobsGoal", goal);
+    } else {
+      localStorage.removeItem("jobsGoal");
+    }
+  };
+
   const resetAssessment = () => {
     setEducationLevelState(null);
     setMatricDataState(null);
@@ -123,6 +165,9 @@ export const AuthProvider = ({ children }) => {
     setIntermediateMarksState({});
     setMatricStreamState(null);
     setIntermediateStreamState(null);
+    setGuidanceTypeState(null);
+    setStudyGoalState(null);
+    setJobsGoalState(null);
 
     localStorage.removeItem("educationLevel");
     localStorage.removeItem("matricData");
@@ -131,6 +176,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("intermediateMarks");
     localStorage.removeItem("matricStream");
     localStorage.removeItem("intermediateStream");
+    localStorage.removeItem("guidanceType");
+    localStorage.removeItem("studyGoal");
+    localStorage.removeItem("jobsGoal");
   };
 
   return (
@@ -152,6 +200,12 @@ export const AuthProvider = ({ children }) => {
         setIntermediateMarks,
         intermediateStream,
         setIntermediateStream,
+        guidanceType,
+        setGuidanceType,
+        studyGoal,
+        setStudyGoal,
+        jobsGoal,
+        setJobsGoal,
         resetAssessment,
         login,
         logout,

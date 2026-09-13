@@ -17,7 +17,13 @@ function IntermediateSubjects() {
     setIntermediateStream,
     matricMarks,
     matricStream,
+    guidanceType,
+    studyGoal,
+    jobsGoal,
   } = useContext(AuthContext);
+  const isStudyMode = guidanceType === "study";
+  const isCareerMode = guidanceType === "career";
+  const isJobsMode = guidanceType === "jobs";
 
   const [marks, setMarks] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -84,6 +90,18 @@ function IntermediateSubjects() {
 
     setTimeout(() => {
       setIsSubmitting(false);
+      if (isStudyMode && studyGoal === "bachelor") {
+        navigate("/study/result", { replace: true });
+        return;
+      }
+      if (isJobsMode && jobsGoal === "inter") {
+        navigate("/jobs/result", { replace: true });
+        return;
+      }
+      if (isJobsMode && jobsGoal === "bachelor") {
+        navigate("/jobs/bachelor", { replace: true });
+        return;
+      }
       navigate("/skills", { replace: true, state: finalData });
     }, 1500);
   };
@@ -180,6 +198,14 @@ function IntermediateSubjects() {
                   <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin mr-3 inline-block"></div>
                   Saving…
                 </>
+              ) : isStudyMode ? (
+                "See Bachelor recommendations"
+              ) : isJobsMode && jobsGoal === "inter" ? (
+                "Find jobs I can apply for"
+              ) : isJobsMode && jobsGoal === "bachelor" ? (
+                "Next: Bachelor / transcript"
+              ) : isCareerMode ? (
+                "Continue to career questions"
               ) : (
                 "Continue to skills"
               )}

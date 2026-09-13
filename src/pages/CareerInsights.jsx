@@ -1,18 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
+import { resolveUniversityPortal } from "../utils/pakistanUniversities";
 
 function normalizeInsightsPayload(raw) {
   if (!raw || typeof raw !== "object") return null;
 
   let degrees = Array.isArray(raw.degrees) ? raw.degrees.map(String).filter(Boolean) : [];
-  let topUniversities = Array.isArray(raw.top_universities)
-    ? raw.top_universities.map(String).filter(Boolean)
-    : [];
-
   let jobProficiency = Array.isArray(raw.job_proficiency) ? [...raw.job_proficiency] : [];
 
   if (!degrees.length && Array.isArray(raw.related_fields)) {
@@ -52,12 +49,46 @@ function normalizeInsightsPayload(raw) {
     ? raw.institutes.map(String).filter(Boolean)
     : [];
 
+  let universities = [];
+  if (Array.isArray(raw.universities) && raw.universities.length) {
+    universities = raw.universities
+      .map((u) => {
+        if (typeof u === "string") {
+          return {
+            name: u,
+            url: resolveUniversityPortal(u, ""),
+            programs: [],
+            note: "",
+          };
+        }
+        const name = String(u?.name || u?.university || "").trim();
+        if (!name) return null;
+        return {
+          name,
+          url: resolveUniversityPortal(name, u?.url || u?.portal || u?.link),
+          programs: Array.isArray(u?.programs)
+            ? u.programs.map(String).filter(Boolean)
+            : [],
+          note: String(u?.note || u?.why || "").trim(),
+        };
+      })
+      .filter(Boolean);
+  } else if (Array.isArray(raw.top_universities)) {
+    universities = raw.top_universities.map((name) => ({
+      name: String(name),
+      url: resolveUniversityPortal(String(name), ""),
+      programs: [],
+      note: "",
+    }));
+  }
+
   return {
     career: raw.career,
     degrees,
-    top_universities: topUniversities.slice(0, 10),
+    universities: universities.slice(0, 10),
     job_proficiency: jobProficiency,
     institutes,
+    source: raw.source,
   };
 }
 
@@ -105,13 +136,13 @@ function CareerInsights() {
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6 text-center sm:text-left">
           <div className="min-w-0 flex-1">
             <p className="text-xs sm:text-sm text-emerald-300/90 font-semibold uppercase tracking-wide mb-2">
-              Pakistan career roadmap
+              Pakistan Guide · AI via OPENAI_API_KEY (.env)
             </p>
             <h1 className="text-xl min-[321px]:text-2xl sm:text-3xl md:text-4xl font-black text-white break-anywhere leading-tight">
               <span className="text-emerald-300">{career || "Career"}</span>
             </h1>
             <p className="text-white/60 text-sm mt-2 max-w-2xl mx-auto sm:mx-0">
-              Degrees common in Pakistan, strongest universities for those pathways, then job-market alignment by degree.
+              Degrees, universities that teach them in Pakistan, and direct portal links so you can open the official site in one click.
             </p>
           </div>
           <button
@@ -126,7 +157,7 @@ function CareerInsights() {
 
         {loading && (
           <GlassCard className="p-6 sm:p-8 text-center text-white/80">
-            Loading degrees, universities, and Pakistan job-market signals…
+            Asking AI for Pakistan universities, programs, and portal links…
           </GlassCard>
         )}
 
@@ -151,27 +182,51 @@ function CareerInsights() {
                   </li>
                 ))}
               </ol>
-              {!normalized.degrees.length && (
-                <p className="text-white/55 text-sm text-center">No degree list returned.</p>
-              )}
             </GlassCard>
 
             <GlassCard className="p-4 sm:p-6 md:p-7 !rounded-2xl sm:!rounded-3xl">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4 text-center sm:text-left">
-                Top universities in Pakistan (up to 10 — strongest fit for these degrees)
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 text-center sm:text-left">
+                Universities in Pakistan for this career
               </h2>
-              <ol className="grid gap-2 sm:grid-cols-2 lg:grid-cols-2">
-                {(normalized.top_universities.length ? normalized.top_universities : []).map((name, i) => (
-                  <li
-                    key={`${name}-${i}`}
-                    className="bg-white/10 rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-white/90 text-sm sm:text-base break-anywhere flex gap-2"
+              <p className="text-white/55 text-xs sm:text-sm mb-5 text-center sm:text-left">
+                Tap Open portal to go straight to the university website.
+              </p>
+              <div className="space-y-3">
+                {(normalized.universities.length ? normalized.universities : []).map((uni, i) => (
+                  <div
+                    key={`${uni.name}-${i}`}
+                    className="bg-white/10 rounded-2xl px-4 py-4 border border-white/15 text-left"
                   >
-                    <span className="text-violet-300 font-black shrink-0">{i + 1}.</span>
-                    <span>{name}</span>
-                  </li>
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-white font-bold text-base sm:text-lg break-anywhere">
+                          <span className="text-violet-300 mr-2">{i + 1}.</span>
+                          {uni.name}
+                        </p>
+                        {uni.programs?.length > 0 && (
+                          <p className="text-emerald-200/90 text-sm mt-2">
+                            Offers: {uni.programs.join(" · ")}
+                          </p>
+                        )}
+                        {uni.note && (
+                          <p className="text-white/60 text-sm mt-1.5 leading-relaxed">{uni.note}</p>
+                        )}
+                      </div>
+                      <a
+                        href={uni.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center justify-center gap-2 shrink-0 px-4 py-2.5 rounded-xl bg-sky-500/25 hover:bg-sky-500/40 border border-sky-300/40 text-white text-sm font-semibold transition-colors"
+                      >
+                        Open portal
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                    <p className="text-white/35 text-[11px] sm:text-xs mt-2 break-all">{uni.url}</p>
+                  </div>
                 ))}
-              </ol>
-              {!normalized.top_universities.length && (
+              </div>
+              {!normalized.universities.length && (
                 <p className="text-white/55 text-sm text-center">No universities returned.</p>
               )}
             </GlassCard>
@@ -202,9 +257,6 @@ function CareerInsights() {
                   </div>
                 ))}
               </div>
-              {!normalized.job_proficiency.length && (
-                <p className="text-white/55 text-sm text-center">No job proficiency rows returned.</p>
-              )}
             </GlassCard>
 
             {normalized.institutes.length > 0 && (
@@ -225,10 +277,30 @@ function CareerInsights() {
               </GlassCard>
             )}
 
-            <div className="flex justify-center sm:justify-start pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center sm:justify-start pt-2">
+              <AnimatedButton
+                onClick={async () => {
+                  try {
+                    const res = await fetch(
+                      `http://127.0.0.1:5000/career-scope?career=${encodeURIComponent(career)}`
+                    );
+                    const json = await res.json();
+                    if (!json?.success) {
+                      alert(json?.message || "Could not load job scope.");
+                      return;
+                    }
+                    navigate("/career-scope", { state: { career, scope: json } });
+                  } catch {
+                    alert("Cannot reach server for job scope.");
+                  }
+                }}
+                className="w-full max-w-sm px-6 py-3.5 glass-card hover:bg-white/15 text-white rounded-2xl font-bold text-sm"
+              >
+                Also see Job Scope %
+              </AnimatedButton>
               <AnimatedButton
                 onClick={() => navigate("/history")}
-                className="w-full max-w-sm sm:max-w-xs px-6 py-3.5 sm:py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl font-bold text-sm sm:text-base"
+                className="w-full max-w-sm px-6 py-3.5 sm:py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl font-bold text-sm sm:text-base"
               >
                 View history
               </AnimatedButton>

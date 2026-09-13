@@ -29,7 +29,7 @@ const navigate = useNavigate();
     }
 
     resetAssessment();
-    navigate("/education", { replace: true });
+    navigate("/guidance", { replace: true });
   };
 
   const hasHistory = user ? getHistoryItems(user).length > 0 : false;
@@ -77,7 +77,7 @@ const navigate = useNavigate();
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          Answer a few questions about school and skills. We suggest careers that may fit you.
+          Answer a few questions about school and skills. We suggest study paths, careers, and more that may fit you.
         </motion.p>
 
         <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center">
@@ -91,7 +91,7 @@ const navigate = useNavigate();
                 className="btn-career text-base md:text-lg px-8 md:px-12 py-4 md:py-5 shadow-2xl career-glow hover:shadow-blue-500/50"
                 onClick={handleStart}
               >
-                Start career test
+                Start guidance
               </button>
             </motion.div>
           )}

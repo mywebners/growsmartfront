@@ -64,7 +64,7 @@ function StreamSelection() {
             </p>
           ) : (
             <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Select the stream you studied in Matric - this shapes your career foundation
+              Select the stream you studied in Matric - this shapes your next recommendations
             </p>
           )}
         </div>

@@ -24,7 +24,7 @@ function Login() {
 
       login(res.data.token, res.data.name);
 
-      navigate("/education", { replace: true });
+      navigate("/guidance", { replace: true });
 
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");

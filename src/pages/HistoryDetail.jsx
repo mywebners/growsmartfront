@@ -30,7 +30,7 @@ function HistoryDetail() {
 
   const handleStartNewTest = () => {
     resetAssessment();
-    navigate("/education");
+    navigate("/guidance");
   };
 
   if (!record) {

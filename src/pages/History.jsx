@@ -34,7 +34,7 @@ function History() {
 
   const handleStartNewTest = () => {
     resetAssessment();
-    navigate("/education", { replace: true });
+    navigate("/guidance", { replace: true });
   };
 
   const handleDelete = (e, id) => {
@@ -161,10 +161,10 @@ function History() {
               className="btn-career px-10 sm:px-12 py-4 text-base sm:text-lg"
               onClick={() => {
                 resetAssessment();
-                navigate("/education", { replace: true });
+                navigate("/guidance", { replace: true });
               }}
             >
-              Start first test
+              Start first guidance
             </button>
           </motion.div>
         )}

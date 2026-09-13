@@ -52,7 +52,7 @@ function Result() {
 
   const handleStartNewTest = () => {
     resetAssessment();
-    navigate("/education");
+    navigate("/guidance");
   };
 
   useEffect(() => {
@@ -155,7 +155,7 @@ function Result() {
               {primary}
             </motion.div>
             <p className="text-white/65 text-base md:text-lg mt-6 max-w-xl mx-auto leading-relaxed">
-              Below are top career suggestions based on your marks, stream, and brain-skill profile.
+              Below are top career suggestions based on your Matric + Intermediate marks and career aptitude answers.
             </p>
           </motion.div>
 
@@ -196,6 +196,28 @@ function Result() {
                     className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold bg-emerald-500/25 hover:bg-emerald-500/35 border border-emerald-300/40 text-white rounded-xl"
                   >
                     Pakistan Guide
+                  </AnimatedButton>
+                  <AnimatedButton
+                    onClick={async () => {
+                      try {
+                        const res = await fetch(
+                          `http://127.0.0.1:5000/career-scope?career=${encodeURIComponent(row.career)}`
+                        );
+                        const data = await res.json();
+                        if (!data?.success) {
+                          alert(data?.message || "Could not load job scope.");
+                          return;
+                        }
+                        navigate("/career-scope", {
+                          state: { career: row.career, scope: data },
+                        });
+                      } catch {
+                        alert("Cannot reach server for Pakistan job scope.");
+                      }
+                    }}
+                    className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold bg-sky-500/25 hover:bg-sky-500/35 border border-sky-300/40 text-white rounded-xl"
+                  >
+                    Job Scope %
                   </AnimatedButton>
                   </div>
                 </div>

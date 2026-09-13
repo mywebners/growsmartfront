@@ -10,8 +10,8 @@ const GOALS = [
     subtitle: "Tell us your Matric stream & marks — we rank Inter courses for you",
     icon: "🎓",
     steps: "Matric → Inter recommendation",
-    accent: "hover:border-teal-400 hover:shadow-teal-500/30",
-    gradient: "from-teal-500/20 to-cyan-500/10",
+    accent: "hover:border-[#2f7de1] hover:shadow-[#0056d2]/20",
+    gradient: "from-[#0056d2]/20 to-[#378edd]/10",
   },
   {
     id: "bachelor",
@@ -19,8 +19,8 @@ const GOALS = [
     subtitle: "Matric + Intermediate details — we rank Bachelor directions honestly",
     icon: "🏛️",
     steps: "Matric + Inter → Bachelor recommendation",
-    accent: "hover:border-sky-400 hover:shadow-sky-500/30",
-    gradient: "from-sky-500/20 to-indigo-500/10",
+    accent: "hover:border-[#378edd] hover:shadow-[#0056d2]/20",
+    gradient: "from-[#2f7de1]/20 to-[#0056d2]/10",
   },
 ];
 
@@ -35,7 +35,7 @@ function StudyGoal() {
   };
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex flex-col items-center justify-center">
+    <div className="min-h-screen pt-8 sm:pt-10 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex flex-col items-center justify-center">
       <motion.div
         className="glass-card p-8 sm:p-12 md:p-16 max-w-3xl w-full backdrop-blur-xl shadow-2xl career-glow text-center"
         initial={{ opacity: 0, y: 40 }}
@@ -43,13 +43,13 @@ function StudyGoal() {
         transition={{ duration: 0.7 }}
       >
         <div className="mb-10 sm:mb-14">
-          <div className="text-6xl sm:text-7xl mb-6 mx-auto w-24 h-24 sm:w-28 sm:h-28 bg-gradient-to-br from-emerald-600 to-teal-800 rounded-3xl flex items-center justify-center shadow-2xl career-glow">
+          <div className="text-6xl sm:text-7xl mb-6 mx-auto w-24 h-24 sm:w-28 sm:h-28 bg-gradient-to-br from-[#0056d2] to-[#003a9b] rounded-3xl flex items-center justify-center shadow-2xl career-glow">
             📖
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-emerald-300 via-teal-300 to-cyan-300 bg-clip-text text-transparent mb-4">
+          <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-[#003a9b] via-[#0056d2] to-[#2f7de1] bg-clip-text text-transparent mb-4">
             Study / Educational Guidance
           </h1>
-          <p className="text-base sm:text-xl text-white/75 max-w-xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-[#5b5b5b] max-w-xl mx-auto leading-relaxed">
             What are you planning next? We will ask only what we need, then show every ranked option with clear reasons.
           </p>
         </div>
@@ -60,7 +60,7 @@ function StudyGoal() {
               key={goal.id}
               type="button"
               onClick={() => handleGoal(goal.id)}
-              className={`group glass-card p-7 sm:p-9 border-2 border-white/25 ${goal.accent} transition-all duration-500 relative overflow-hidden text-left flex gap-5 items-start`}
+              className={`group glass-card p-7 sm:p-9 border-2 border-[#d9d9d9] ${goal.accent} transition-all duration-500 relative overflow-hidden text-left flex gap-5 items-start`}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.15 + index * 0.12 }}
@@ -71,13 +71,13 @@ function StudyGoal() {
                 {goal.icon}
               </div>
               <div className="min-w-0">
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 group-hover:text-emerald-300 transition-colors">
+                <h3 className="text-xl sm:text-2xl font-bold text-[#1a1a1a] mb-2 group-hover:text-[#9ec5ff] transition-colors">
                   {goal.title}
                 </h3>
-                <p className="text-sm sm:text-base text-white/70 leading-relaxed mb-3">
+                <p className="text-sm sm:text-base text-[#5b5b5b] leading-relaxed mb-3">
                   {goal.subtitle}
                 </p>
-                <span className="inline-block text-xs sm:text-sm px-3 py-1 rounded-full bg-white/10 border border-white/20 text-emerald-200/90">
+                <span className="inline-block text-xs sm:text-sm px-3 py-1 rounded-full bg-[#0056d2]/15 border border-[#d9d9d9] text-[#9ec5ff]">
                   {goal.steps}
                 </span>
               </div>
@@ -90,7 +90,7 @@ function StudyGoal() {
 
         <motion.button
           type="button"
-          className="mt-10 text-white/60 hover:text-white/90 text-sm sm:text-base transition-colors"
+          className="mt-10 text-[#6a6a6a] hover:text-[#1a1a1a] text-sm sm:text-base transition-colors"
           onClick={() => navigate("/guidance")}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

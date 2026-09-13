@@ -18,7 +18,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
+    <div className="min-h-screen pt-8 sm:pt-10 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -29,7 +29,7 @@ const ForgotPassword = () => {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent mb-2">
             Reset Password
           </h1>
-          <p className="text-white/70">Enter your email to receive reset instructions</p>
+          <p className="text-[#5b5b5b]">Enter your email to receive reset instructions</p>
         </motion.div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
@@ -58,7 +58,7 @@ const ForgotPassword = () => {
 
         <div className="text-center mt-8">
           <button
-            className="text-blue-400 hover:text-blue-300 text-sm font-medium underline"
+            className="text-[#2f7de1] hover:text-[#378edd] text-sm font-medium underline"
             onClick={() => navigate('/login')}
           >
             Back to Login

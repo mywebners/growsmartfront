@@ -28,8 +28,9 @@ import JobsGuidance from "./pages/JobsGuidance";
 import CareerScope from "./pages/CareerScope";
 import JobsBachelor from "./pages/JobsBachelor";
 import JobsResult from "./pages/JobsResult";
+import CvMaker from "./pages/CvMaker";
+import CvResult from "./pages/CvResult";
 
-import Scene3D from './components/3DCanvas';
 import LoadingSpinner from "./components/LoadingSpinner";
 
 function AppLayout() {
@@ -59,11 +60,20 @@ function AppLayout() {
         <Route path="/jobs-guidance" element={
           <ProtectedRoute><JobsGuidance /></ProtectedRoute>
         } />
+        <Route path="/jobs/details" element={
+          <ProtectedRoute><JobsBachelor /></ProtectedRoute>
+        } />
         <Route path="/jobs/bachelor" element={
           <ProtectedRoute><JobsBachelor /></ProtectedRoute>
         } />
         <Route path="/jobs/result" element={
           <ProtectedRoute><JobsResult /></ProtectedRoute>
+        } />
+        <Route path="/cv-maker" element={
+          <ProtectedRoute><CvMaker /></ProtectedRoute>
+        } />
+        <Route path="/cv/result" element={
+          <ProtectedRoute><CvResult /></ProtectedRoute>
         } />
 
         <Route path="/education" element={
@@ -111,6 +121,14 @@ function AppLayout() {
   );
 }
 
+function AppShell() {
+  return (
+    <div className="relative z-10 min-h-screen page-shell home-clean-shell">
+      <AppLayout />
+    </div>
+  );
+}
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -122,14 +140,11 @@ function App() {
   return (
     <>
       {isLoading && <LoadingSpinner />}
-      <Scene3D />
-      <div className="relative z-10 min-h-screen page-shell">
-        <AuthProvider>
-          <Router>
-            <AppLayout />
-          </Router>
-        </AuthProvider>
-      </div>
+      <AuthProvider>
+        <Router>
+          <AppShell />
+        </Router>
+      </AuthProvider>
     </>
   );
 }

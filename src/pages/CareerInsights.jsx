@@ -138,17 +138,17 @@ function CareerInsights() {
             <p className="text-xs sm:text-sm text-emerald-300/90 font-semibold uppercase tracking-wide mb-2">
               Pakistan Guide · AI via OPENAI_API_KEY (.env)
             </p>
-            <h1 className="text-xl min-[321px]:text-2xl sm:text-3xl md:text-4xl font-black text-white break-anywhere leading-tight">
+            <h1 className="text-xl min-[321px]:text-2xl sm:text-3xl md:text-4xl font-black text-[#1a1a1a] break-anywhere leading-tight">
               <span className="text-emerald-300">{career || "Career"}</span>
             </h1>
-            <p className="text-white/60 text-sm mt-2 max-w-2xl mx-auto sm:mx-0">
+            <p className="text-[#6a6a6a] text-sm mt-2 max-w-2xl mx-auto sm:mx-0">
               Degrees, universities that teach them in Pakistan, and direct portal links so you can open the official site in one click.
             </p>
           </div>
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="p-2.5 sm:p-3 rounded-full glass-card hover:bg-white/20 transition-all shrink-0 mx-auto sm:mx-0 sm:mt-1"
+            className="p-2.5 sm:p-3 rounded-full glass-card hover:bg-[#0056d2]/10 transition-all shrink-0 mx-auto sm:mx-0 sm:mt-1"
             aria-label="Back"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -156,7 +156,7 @@ function CareerInsights() {
         </div>
 
         {loading && (
-          <GlassCard className="p-6 sm:p-8 text-center text-white/80">
+          <GlassCard className="p-6 sm:p-8 text-center text-[#2b2b2b]">
             Asking AI for Pakistan universities, programs, and portal links…
           </GlassCard>
         )}
@@ -168,14 +168,14 @@ function CareerInsights() {
         {!loading && !error && normalized && (
           <div className="space-y-5 sm:space-y-6">
             <GlassCard className="p-4 sm:p-6 md:p-7 !rounded-2xl sm:!rounded-3xl">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4 text-center sm:text-left">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] mb-4 text-center sm:text-left">
                 Related degrees in Pakistan
               </h2>
               <ol className="grid gap-2 sm:gap-3 sm:grid-cols-2">
                 {(normalized.degrees.length ? normalized.degrees : []).map((name, i) => (
                   <li
                     key={`${name}-${i}`}
-                    className="bg-white/10 rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-white/90 text-sm sm:text-base break-anywhere flex gap-2"
+                    className="bg-[#eef5ff] rounded-xl px-3 py-2.5 sm:px-4 sm:py-3 text-[#1a1a1a] text-sm sm:text-base break-anywhere flex gap-2"
                   >
                     <span className="text-emerald-400 font-black shrink-0">{i + 1}.</span>
                     <span>{name}</span>
@@ -185,21 +185,21 @@ function CareerInsights() {
             </GlassCard>
 
             <GlassCard className="p-4 sm:p-6 md:p-7 !rounded-2xl sm:!rounded-3xl">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2 text-center sm:text-left">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] mb-2 text-center sm:text-left">
                 Universities in Pakistan for this career
               </h2>
-              <p className="text-white/55 text-xs sm:text-sm mb-5 text-center sm:text-left">
+              <p className="text-[#6a6a6a] text-xs sm:text-sm mb-5 text-center sm:text-left">
                 Tap Open portal to go straight to the university website.
               </p>
               <div className="space-y-3">
                 {(normalized.universities.length ? normalized.universities : []).map((uni, i) => (
                   <div
                     key={`${uni.name}-${i}`}
-                    className="bg-white/10 rounded-2xl px-4 py-4 border border-white/15 text-left"
+                    className="bg-[#e8eef8] rounded-2xl px-4 py-4 border border-[#d9d9d9] text-left"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                       <div className="min-w-0 flex-1">
-                        <p className="text-white font-bold text-base sm:text-lg break-anywhere">
+                        <p className="text-[#1a1a1a] font-bold text-base sm:text-lg break-anywhere">
                           <span className="text-violet-300 mr-2">{i + 1}.</span>
                           {uni.name}
                         </p>
@@ -209,7 +209,7 @@ function CareerInsights() {
                           </p>
                         )}
                         {uni.note && (
-                          <p className="text-white/60 text-sm mt-1.5 leading-relaxed">{uni.note}</p>
+                          <p className="text-[#6a6a6a] text-sm mt-1.5 leading-relaxed">{uni.note}</p>
                         )}
                       </div>
                       <a
@@ -222,33 +222,33 @@ function CareerInsights() {
                         <ExternalLink className="w-4 h-4" />
                       </a>
                     </div>
-                    <p className="text-white/35 text-[11px] sm:text-xs mt-2 break-all">{uni.url}</p>
+                    <p className="text-[#8a8a8a] text-[11px] sm:text-xs mt-2 break-all">{uni.url}</p>
                   </div>
                 ))}
               </div>
               {!normalized.universities.length && (
-                <p className="text-white/55 text-sm text-center">No universities returned.</p>
+                <p className="text-[#6a6a6a] text-sm text-center">No universities returned.</p>
               )}
             </GlassCard>
 
             <GlassCard className="p-4 sm:p-6 md:p-7 !rounded-2xl sm:!rounded-3xl">
-              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4 text-center sm:text-left">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] mb-4 text-center sm:text-left">
                 Job proficiency by degree (Pakistan — approximate %)
               </h2>
               <div className="space-y-4 max-w-3xl mx-auto sm:mx-0 sm:max-w-none">
                 {(normalized.job_proficiency.length ? normalized.job_proficiency : []).map((item, i) => (
                   <div key={`${item.degree}-${i}`}>
                     <div className="flex flex-col xs:flex-row xs:items-center xs:justify-between gap-1 xs:gap-3 mb-2">
-                      <p className="text-white text-sm sm:text-base break-anywhere text-center xs:text-left flex-1">
+                      <p className="text-[#1a1a1a] text-sm sm:text-base break-anywhere text-center xs:text-left flex-1">
                         {item.degree}
                       </p>
                       <p className="text-emerald-300 font-bold text-center xs:text-right shrink-0">
                         {item.percentage}%
                       </p>
                     </div>
-                    <div className="h-2.5 sm:h-3 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-2.5 sm:h-3 bg-[#eef5ff] rounded-full overflow-hidden">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full"
+                        className="h-full bg-gradient-to-r from-[#0056d2] to-[#378edd] rounded-full"
                         initial={{ width: 0 }}
                         animate={{ width: `${item.percentage}%` }}
                         transition={{ duration: 1.05, delay: i * 0.1 }}
@@ -261,14 +261,14 @@ function CareerInsights() {
 
             {normalized.institutes.length > 0 && (
               <GlassCard className="p-4 sm:p-6 md:p-7 !rounded-2xl sm:!rounded-3xl">
-                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4 text-center sm:text-left">
+                <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] mb-4 text-center sm:text-left">
                   Vocational & skills institutes
                 </h2>
                 <ul className="grid gap-2 sm:grid-cols-2">
                   {normalized.institutes.map((name, i) => (
                     <li
                       key={`${name}-${i}`}
-                      className="bg-white/10 rounded-xl px-3 py-2.5 text-white/85 text-sm break-anywhere"
+                      className="bg-[#eef5ff] rounded-xl px-3 py-2.5 text-[#1a1a1a] text-sm break-anywhere"
                     >
                       {i + 1}. {name}
                     </li>
@@ -294,13 +294,13 @@ function CareerInsights() {
                     alert("Cannot reach server for job scope.");
                   }
                 }}
-                className="w-full max-w-sm px-6 py-3.5 glass-card hover:bg-white/15 text-white rounded-2xl font-bold text-sm"
+                className="w-full max-w-sm px-6 py-3.5 glass-card hover:bg-[#0056d2]/10 text-[#1a1a1a] rounded-2xl font-bold text-sm"
               >
                 Also see Job Scope %
               </AnimatedButton>
               <AnimatedButton
                 onClick={() => navigate("/history")}
-                className="w-full max-w-sm px-6 py-3.5 sm:py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-2xl font-bold text-sm sm:text-base"
+                className="w-full max-w-sm px-6 py-3.5 sm:py-4 bg-gradient-to-r from-[#0056d2] to-[#2f7de1] text-white rounded-2xl font-bold text-sm sm:text-base"
               >
                 View history
               </AnimatedButton>

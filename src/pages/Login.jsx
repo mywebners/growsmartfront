@@ -32,7 +32,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
+    <div className="min-h-screen pt-8 sm:pt-10 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -49,7 +49,7 @@ function Login() {
           <h1 className="text-4xl font-bold text-career-gradient mb-2">
             Welcome Back
           </h1>
-          <p className="text-white/70">Sign in to use GrowSmart</p>
+          <p className="text-[#5b5b5b]">Sign in to use GrowSmart</p>
         </motion.div>
 
         <form className="space-y-6">
@@ -89,7 +89,7 @@ function Login() {
             <button
               type="button"
               onClick={handleSubmit}
-              className="btn-career w-full text-lg py-5 shadow-2xl hover:shadow-blue-500/50"
+              className="btn-career w-full text-lg py-5 shadow-2xl hover:shadow-[#2f7de1]/40"
             >
               Sign In
             </button>
@@ -110,7 +110,7 @@ function Login() {
             </button>
             <button
               type="button"
-              className="text-blue-400 hover:text-blue-300 text-sm font-medium underline block w-full"
+              className="text-[#2f7de1] hover:text-[#378edd] text-sm font-medium underline block w-full"
               onClick={() => navigate('/register')}
             >
               Don't have an account? Create one

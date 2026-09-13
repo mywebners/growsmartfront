@@ -1,59 +1,159 @@
-import React, { useContext } from "react";
-import { motion } from "framer-motion";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+const NAV_ITEMS = [
+  { id: "explore", label: "Explore", path: "/guidance" },
+  { id: "study", label: "Study", path: "/study/goal" },
+  { id: "careers", label: "Careers", path: "/education" },
+  { id: "jobs", label: "Jobs", path: "/jobs-guidance" },
+];
 
 function Navbar() {
-
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   const handleLogout = () => {
+    setMenuOpen(false);
     logout();
     navigate("/login", { replace: true });
   };
 
+  useEffect(() => {
+    const onDocClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  const go = (path) => {
+    setMenuOpen(false);
+    navigate(path);
+  };
+
+  const isActive = (path) =>
+    location.pathname === path || location.pathname.startsWith(`${path}/`);
+
   return (
-    <nav className="glass-card backdrop-blur-xl fixed top-3 sm:top-5 left-1/2 -translate-x-1/2 w-[min(94vw,calc(100vw-0.75rem))] max-w-5xl z-20 px-2.5 py-2 sm:px-4 sm:py-3 md:px-6 md:py-4 shadow-2xl career-glow">
-      <div className="flex items-center justify-between gap-2 sm:gap-4 min-h-[2.5rem]">
-        <motion.h1 
-          className="text-lg sm:text-2xl md:text-3xl font-bold text-career-gradient hover:scale-105 transition-transform truncate min-w-0 max-[320px]:text-base"
-          onClick={() => navigate('/')}
-          whileHover={{ scale: 1.05, rotate: 2 }}
-          whileTap={{ scale: 0.98 }}
-          style={{ cursor: 'pointer' }}
-        >
-          GrowSmart
-        </motion.h1>
-        
-        <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 shrink-0">
-          {user ? (
-            <button 
-              className="px-2.5 sm:px-4 md:px-6 py-1.5 sm:py-2 glass-card text-xs sm:text-sm font-medium hover:bg-white/20 transition-all whitespace-nowrap"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
-          ) : (
-            <>
-              <button 
-                className="px-2.5 sm:px-4 md:px-6 py-1.5 sm:py-2 glass-card text-xs sm:text-sm font-medium hover:bg-white/20 transition-all whitespace-nowrap"
-                onClick={() => navigate('/login')}
+    <header className="gs-topbar">
+      <nav className="gs-main-nav">
+        <div className="gs-main-nav-inner">
+          <button type="button" className="gs-logo" onClick={() => navigate("/")}>
+            <span className="gs-logo-text">GrowSmart</span>
+            <span className="gs-logo-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.8 7.2 17.9l.9-5.4L4.2 8.7l5.4-.8L12 3z"
+                  fill="currentColor"
+                />
+              </svg>
+            </span>
+          </button>
+
+          <div className="gs-nav-links">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className={`gs-nav-link ${isActive(item.path) ? "is-active" : ""}`}
+                onClick={() => navigate(user ? item.path : "/login")}
               >
-                Login
+                {item.label}
               </button>
-              <button 
-                className="btn-career text-xs sm:text-sm px-2.5 sm:px-4 md:px-6 py-2 sm:py-2.5 max-[380px]:!py-2 max-[380px]:!px-2"
-                onClick={() => navigate('/register')}
+            ))}
+          </div>
+
+          <div className="gs-nav-actions">
+            {user ? (
+              <div
+                className={`gs-account ${menuOpen ? "is-open" : ""}`}
+                ref={menuRef}
+                onMouseEnter={() => setMenuOpen(true)}
+                onMouseLeave={() => setMenuOpen(false)}
               >
-                <span className="hidden xs:inline">Get Started</span>
-                <span className="xs:hidden">Start</span>
-              </button>
-            </>
-          )}
+                <button
+                  type="button"
+                  className="gs-account-btn"
+                  aria-label="Account menu"
+                  aria-expanded={menuOpen}
+                  onClick={() => setMenuOpen((open) => !open)}
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M4 20.5c0-3.59 3.582-6.5 8-6.5s8 2.91 8 6.5"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+
+                <div className="gs-account-menu" role="menu">
+                  <div className="gs-account-user">
+                    <strong>{user}</strong>
+                    <span>GrowSmart account</span>
+                  </div>
+                  <button type="button" role="menuitem" onClick={() => go("/guidance")}>
+                    Guidance Hub
+                  </button>
+                  <button type="button" role="menuitem" onClick={() => go("/cv-maker")}>
+                    CV Maker
+                  </button>
+                  <button type="button" role="menuitem" onClick={() => go("/history")}>
+                    My History
+                  </button>
+                  <button type="button" role="menuitem" onClick={() => go("/")}>
+                    Dashboard Home
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    className="gs-signout"
+                    onClick={handleLogout}
+                  >
+                    Sign out
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="gs-nav-text"
+                  onClick={() => navigate("/login")}
+                >
+                  Log In
+                </button>
+                <button
+                  type="button"
+                  className="gs-nav-join"
+                  onClick={() => navigate("/register")}
+                >
+                  Join for Free
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }
 

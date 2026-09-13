@@ -30,7 +30,7 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
+    <div className="min-h-screen pt-8 sm:pt-10 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -44,10 +44,10 @@ function Register() {
           transition={{ delay: 0.2 }}
         >
           <div className="text-6xl mb-4">👤</div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#003a9b] via-[#0056d2] to-[#2f7de1] bg-clip-text text-transparent mb-2">
             Create Account
           </h1>
-          <p className="text-white/70">Join thousands discovering their dream careers</p>
+          <p className="text-[#5b5b5b]">Join thousands discovering their dream careers</p>
         </motion.div>
 
         <form className="space-y-6">
@@ -101,7 +101,7 @@ function Register() {
             <button
               type="button"
               onClick={handleSubmit}
-              className="btn-career w-full text-lg py-5 shadow-2xl hover:shadow-green-500/50"
+              className="btn-career w-full text-lg py-5 shadow-2xl hover:shadow-[#2f7de1]/40"
             >
               Create Account
             </button>
@@ -114,7 +114,7 @@ function Register() {
             transition={{ delay: 0.8 }}
           >
             <button
-              className="text-blue-400 hover:text-blue-300 text-sm font-medium underline"
+              className="text-[#2f7de1] hover:text-[#378edd] text-sm font-medium underline"
               onClick={() => navigate('/login')}
             >
               Already have an account? Sign In

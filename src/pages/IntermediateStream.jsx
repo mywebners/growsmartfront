@@ -21,28 +21,28 @@ function IntermediateStream() {
         id: "pre-med",
         title: "Pre-Medical",
         subtitle: "👨‍⚕️ Biology, Chemistry, Physics",
-        color: "from-emerald-500 to-green-600",
+        color: "from-[#0056d2] to-[#0044a8]",
         icon: "🩺"
       },
       {
         id: "pre-eng", 
         title: "Pre-Engineering",
         subtitle: "🔧 Math, Physics, Chemistry",
-        color: "from-blue-500 to-indigo-600",
+        color: "from-[#2f7de1] to-[#0056d2]",
         icon: "⚙️"
       },
       {
         id: "ics",
         title: "ICS (Computer Science)",
         subtitle: "💻 Computer, Math, Physics", 
-        color: "from-purple-500 to-violet-600",
+        color: "from-[#378edd] to-[#003a9b]",
         icon: "🖥️"
       },
       {
         id: "arts",
         title: "Arts & Humanities",
         subtitle: "🎨 Psychology, Sociology, Civics",
-        color: "from-orange-500 to-red-600",
+        color: "from-[#FF6BA8] to-[#0056d2]",
         icon: "🎭"
       }
     ];
@@ -68,28 +68,28 @@ function IntermediateStream() {
       id: "pre-med",
       title: "Pre-Medical",
       subtitle: "👨‍⚕️ Biology, Chemistry, Physics",
-      color: "from-emerald-500 to-green-600",
+      color: "from-[#0056d2] to-[#0044a8]",
       icon: "🩺"
     },
     {
       id: "pre-eng", 
       title: "Pre-Engineering",
       subtitle: "🔧 Math, Physics, Chemistry",
-      color: "from-blue-500 to-indigo-600",
+      color: "from-[#2f7de1] to-[#0056d2]",
       icon: "⚙️"
     },
     {
       id: "ics",
       title: "ICS (Computer Science)",
       subtitle: "💻 Computer, Math, Physics", 
-      color: "from-purple-500 to-violet-600",
+      color: "from-[#378edd] to-[#003a9b]",
       icon: "🖥️"
     },
     {
       id: "arts",
       title: "Arts & Humanities",
       subtitle: "🎨 Psychology, Sociology, Civics",
-      color: "from-orange-500 to-red-600",
+      color: "from-[#FF6BA8] to-[#0056d2]",
       icon: "🎭"
     }
   ];
@@ -111,7 +111,7 @@ function IntermediateStream() {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center mb-12 sm:mb-20"
           >
-            <div className={`text-5xl sm:text-7xl mb-6 sm:mb-8 animate-bounce ${isReviewMode ? 'w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-emerald-500 to-green-600 rounded-3xl flex items-center justify-center shadow-2xl career-glow mx-auto' : ''}`}>
+            <div className={`text-5xl sm:text-7xl mb-6 sm:mb-8 animate-bounce ${isReviewMode ? 'w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-[#0056d2] to-[#0044a8] rounded-3xl flex items-center justify-center shadow-2xl career-glow mx-auto' : ''}`}>
               {isReviewMode ? '✏️' : '🎓'}
             </div>
             <h1 className="text-2xl min-[321px]:text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-white to-white/50 bg-clip-text text-transparent mb-4 sm:mb-6 px-1 break-anywhere">
@@ -121,9 +121,9 @@ function IntermediateStream() {
                   ? "Which Intermediate did you study?"
                   : "Choose Intermediate Stream"}
             </h1>
-            <p className="text-base sm:text-xl text-white/80 max-w-2xl mx-auto leading-relaxed px-1">
+            <p className="text-base sm:text-xl text-[#2b2b2b] max-w-2xl mx-auto leading-relaxed px-1">
               {isReviewMode ? (
-                <>Edit marks for your <span className="font-bold text-emerald-400">{reviewStream?.replace('-', ' ').toUpperCase()}</span> stream</>
+                <>Edit marks for your <span className="font-bold text-[#2f7de1]">{reviewStream?.replace('-', ' ').toUpperCase()}</span> stream</>
               ) : isStudyBachelor ? (
                 "Pick the Intermediate stream you already completed — then enter marks so we can rank Bachelor options"
               ) : (
@@ -156,10 +156,10 @@ function IntermediateStream() {
                     className={`
                       min-h-[14rem] sm:min-h-[16rem] md:h-80 cursor-pointer group relative overflow-hidden transition-all duration-500
                       ${isSelected 
-                        ? 'ring-4 ring-emerald-400/50 shadow-2xl shadow-emerald-500/50 cursor-pointer border-emerald-400 bg-emerald-500/20' 
+                        ? 'ring-4 ring-[#378edd]/50 shadow-2xl shadow-[#0056d2]/50 cursor-pointer border-[#2f7de1] bg-[#0056d2]/20' 
                         : isDisabled 
-                          ? 'opacity-50 cursor-not-allowed hover:opacity-50 hover:scale-100 hover:shadow-none border-gray-500/50 pointer-events-none' 
-                          : 'hover:bg-white/20 hover:border-emerald-400/50 hover:shadow-2xl'
+                          ? 'opacity-50 cursor-not-allowed hover:opacity-50 hover:scale-100 hover:shadow-none border-[#d9d9d9] pointer-events-none' 
+                          : 'hover:bg-[#0056d2]/12 hover:border-[#2f7de1]/50 hover:shadow-2xl'
                       }`}
                     onClick={isDisabled ? undefined : () => handleStreamSelect(stream.id)}
                     aria-disabled={isDisabled}
@@ -175,11 +175,11 @@ function IntermediateStream() {
                         {stream.icon}
                       </motion.div>
                       
-                      <h3 className={`text-xl sm:text-2xl md:text-3xl font-black mb-3 sm:mb-4 drop-shadow-lg transition-colors break-anywhere ${isSelected ? 'text-emerald-300' : isDisabled ? 'text-white/60' : 'text-white'}`}>
+                      <h3 className={`text-xl sm:text-2xl md:text-3xl font-black mb-3 sm:mb-4 drop-shadow-lg transition-colors break-anywhere ${isSelected ? 'text-[#9ec5ff]' : isDisabled ? 'text-[#6a6a6a]' : 'text-[#1a1a1a]'}`}>
                         {stream.title}
                       </h3>
                       
-                      <p className={`text-sm sm:text-lg mb-6 sm:mb-8 font-medium transition-opacity ${isDisabled ? 'text-white/40' : 'text-white/90'}`}>
+                      <p className={`text-sm sm:text-lg mb-6 sm:mb-8 font-medium transition-opacity ${isDisabled ? 'text-[#8a8a8a]' : 'text-[#1a1a1a]'}`}>
                         {isSelected ? 'Click to Review/Edit Marks' : stream.subtitle}
                         {isMatricRestricted && (
                           <span className="block mt-2 px-3 py-1 bg-red-500/80 text-xs rounded-full font-bold animate-pulse">
@@ -189,12 +189,12 @@ function IntermediateStream() {
                       </p>
                       
                       <motion.div
-                        className={`px-8 py-3 backdrop-blur-sm rounded-2xl border text-white font-semibold text-sm uppercase tracking-wider shadow-lg transition-all ${
+                        className={`px-8 py-3 backdrop-blur-sm rounded-2xl border text-[#1a1a1a] font-semibold text-sm uppercase tracking-wider shadow-lg transition-all ${
                           isSelected 
-                            ? 'bg-emerald-500/80 border-emerald-400 scale-105' 
-                            : isDisabled 
-                              ? 'bg-white/10 border-white/20 opacity-50 cursor-not-allowed' 
-                              : 'bg-white/20 border-white/30 hover:bg-white/30 hover:scale-105 hover:border-emerald-400/50'
+                            ? 'bg-[#0056d2]/80 border-[#2f7de1] scale-105' 
+                            : isDisabled
+                              ? 'bg-[#e8eef8] border-[#d9d9d9] opacity-50 cursor-not-allowed' 
+                              : 'bg-[#e8eef8] border-[#d9d9d9] hover:bg-[#0056d2]/20 hover:scale-105 hover:border-[#2f7de1]/50'
                         }`}
                         whileHover={isDisabled ? {} : { scale: 1.1, backgroundColor: 'rgba(255,255,255,0.3)' }}
                       >
@@ -203,13 +203,13 @@ function IntermediateStream() {
                     </div>
                     
                     {isSelected && (
-                      <div className="absolute -top-4 -right-4 bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse shadow-lg">
+                      <div className="absolute -top-4 -right-4 bg-[#0056d2] text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse shadow-lg">
                         SELECTED
                       </div>
                     )}
 
                     <motion.div 
-                      className={`absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 opacity-0 blur-xl scale-150 ${isSelected ? '' : 'hidden'}`}
+                      className={`absolute inset-0 bg-gradient-to-r from-[#2f7de1] to-[#378edd] opacity-0 blur-xl scale-150 ${isSelected ? '' : 'hidden'}`}
                       animate={isSelected ? { 
                         opacity: [0, 0.3, 0],
                         scale: [1.5, 1.8, 1.5]
@@ -237,7 +237,7 @@ function IntermediateStream() {
           )}
           {isReviewMode && (
             <motion.p 
-              className="mt-4 text-lg text-emerald-400/90 max-w-2xl text-center bg-emerald-500/10 p-6 rounded-2xl border-2 border-emerald-400/30 font-semibold shadow-xl"
+              className="mt-4 text-lg text-[#9ec5ff] max-w-2xl text-center bg-[#0056d2]/10 p-6 rounded-2xl border-2 border-[#2f7de1]/30 font-semibold shadow-xl"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
             >

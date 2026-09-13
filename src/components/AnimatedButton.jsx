@@ -12,7 +12,7 @@ const AnimatedButton = ({ children, className = 'btn-career', onClick, ...props 
     const tl = gsap.timeline({ paused: true });
     tl.to(button, {
       scale: 1.05,
-      boxShadow: '0 20px 40px rgba(79, 70, 229, 0.4)',
+      boxShadow: '0 20px 40px rgba(225, 29, 116, 0.45)',
       duration: 0.3,
       ease: 'power2.out'
     });

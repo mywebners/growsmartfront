@@ -32,7 +32,7 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
+    <div className="min-h-screen pt-8 sm:pt-10 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -41,10 +41,10 @@ function ForgotPassword() {
       >
         <div className="text-center mb-10">
           <div className="text-6xl mb-4">🔑</div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-[#003a9b] via-[#0056d2] to-[#2f7de1] bg-clip-text text-transparent mb-2">
             Forgot password
           </h1>
-          <p className="text-white/70 text-sm">
+          <p className="text-[#5b5b5b] text-sm">
             Enter the email you registered with. If it exists, your password will be reset.
           </p>
         </div>
@@ -63,7 +63,7 @@ function ForgotPassword() {
             <p className="text-red-400 text-sm text-center">{error}</p>
           )}
           {message && (
-            <p className="text-emerald-300 text-sm text-center bg-white/5 rounded-xl p-4 border border-emerald-500/30">
+            <p className="text-[#9ec5ff] text-sm text-center bg-[#0056d2]/10 rounded-xl p-4 border border-[#0056d2]/30">
               {message}
             </p>
           )}
@@ -79,14 +79,14 @@ function ForgotPassword() {
           <div className="text-center space-y-2">
             <button
               type="button"
-              className="text-blue-400 hover:text-blue-300 text-sm font-medium underline block w-full"
+              className="text-[#2f7de1] hover:text-[#378edd] text-sm font-medium underline block w-full"
               onClick={() => navigate("/login")}
             >
               Back to sign in
             </button>
             <button
               type="button"
-              className="text-white/50 hover:text-white/80 text-sm"
+              className="text-[#6a6a6a] hover:text-[#2b2b2b] text-sm"
               onClick={() => navigate("/register")}
             >
               Create account

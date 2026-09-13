@@ -210,22 +210,22 @@ function SkillsTest() {
             className="text-center mb-12"
           >
             <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">🧭</div>
-            <h1 className="text-2xl min-[321px]:text-4xl md:text-5xl font-black bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-500 bg-clip-text text-transparent mb-3 sm:mb-4 px-1 break-anywhere">
+            <h1 className="text-2xl min-[321px]:text-4xl md:text-5xl font-black bg-gradient-to-r from-[#003a9b] via-[#0056d2] to-[#2f7de1] bg-clip-text text-transparent mb-3 sm:mb-4 px-1 break-anywhere">
               Career Aptitude Questions
             </h1>
-            <p className="text-base sm:text-lg text-white/75 max-w-lg mx-auto mb-6 px-1">
+            <p className="text-base sm:text-lg text-[#5b5b5b] max-w-lg mx-auto mb-6 px-1">
               {subtitle} Answer honestly — suggestions use your Matric + Inter marks and these answers.
             </p>
-            <div className="w-full bg-white/10 backdrop-blur-sm h-2 rounded-full overflow-hidden max-w-xl mx-auto">
+            <div className="w-full bg-[#eef5ff] backdrop-blur-sm h-2 rounded-full overflow-hidden max-w-xl mx-auto">
               <motion.div
-                className="h-full bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full"
+                className="h-full bg-gradient-to-r from-[#0056d2] to-[#378edd] rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.35 }}
               />
             </div>
             {!isCompleted && (
-              <p className="text-white/60 text-sm mt-3">
+              <p className="text-[#6a6a6a] text-sm mt-3">
                 Question {currentQuestion + 1} of {questions.length}
               </p>
             )}
@@ -244,7 +244,7 @@ function SkillsTest() {
                   <div className="text-5xl md:text-6xl mb-6 text-center">
                     {currentQ?.icon || "💼"}
                   </div>
-                  <h2 className="text-xl md:text-2xl font-bold text-white text-center mb-8 leading-snug px-1">
+                  <h2 className="text-xl md:text-2xl font-bold text-[#1a1a1a] text-center mb-8 leading-snug px-1">
                     {currentQ?.text}
                   </h2>
                   <div className="space-y-4 flex-1 flex flex-col justify-center">
@@ -260,12 +260,12 @@ function SkillsTest() {
                         onClick={() => handleOptionSelect(option.value)}
                         className={`w-full text-left rounded-2xl border px-5 py-4 md:py-5 shadow-lg backdrop-blur-sm transition-colors duration-200 flex items-center gap-4 ${
                           selected
-                            ? "border-emerald-400/70 bg-emerald-500/20 ring-2 ring-emerald-400/40"
-                            : "border-white/20 bg-white/5 hover:bg-white/12 hover:border-emerald-400/40"
+                            ? "border-[#2f7de1]/70 bg-[#0056d2]/20 ring-2 ring-[#378edd]/40"
+                            : "border-[#d9d9d9] bg-[#e8eef8]/60 hover:bg-[#0056d2]/12 hover:border-[#2f7de1]/40"
                         }`}
                       >
                         <span className="text-2xl shrink-0">{option.emoji}</span>
-                        <span className="font-semibold text-lg text-white/95">
+                        <span className="font-semibold text-lg text-[#1a1a1a]">
                           {option.label}
                         </span>
                       </motion.button>
@@ -275,8 +275,8 @@ function SkillsTest() {
               ) : (
                 <div className="flex flex-col items-center justify-center flex-1 text-center py-6">
                   <div className="text-7xl mb-8">🎉</div>
-                  <p className="text-2xl font-bold text-white mb-4">All done</p>
-                  <p className="text-white/70 text-lg mb-10 max-w-md">
+                  <p className="text-2xl font-bold text-[#1a1a1a] mb-4">All done</p>
+                  <p className="text-[#5b5b5b] text-lg mb-10 max-w-md">
                     We will match top careers using your marks and these career answers from the database model.
                   </p>
                 </div>
@@ -289,7 +289,7 @@ function SkillsTest() {
               <AnimatedButton
                 onClick={handleBack}
                 disabled={currentQuestion === 0}
-                className="px-10 py-4 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold rounded-2xl backdrop-blur-sm disabled:opacity-30"
+                className="px-10 py-4 bg-[#e8eef8] hover:bg-[#0056d2]/10 border border-[#d9d9d9] text-[#1a1a1a] font-semibold rounded-2xl disabled:opacity-30"
               >
                 ← Previous
               </AnimatedButton>
@@ -299,7 +299,7 @@ function SkillsTest() {
               <AnimatedButton
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="px-14 py-5 text-lg font-bold bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 shadow-2xl rounded-2xl"
+                className="px-14 py-5 text-lg font-bold bg-gradient-to-r from-[#0056d2] to-[#2f7de1] text-white hover:from-[#2f7de1] hover:to-[#378edd] shadow-2xl rounded-2xl"
               >
                 {isSubmitting ? (
                   <>
@@ -314,7 +314,7 @@ function SkillsTest() {
           </div>
 
           {!isCompleted && (
-            <p className="text-center text-white/45 text-sm mt-6">
+            <p className="text-center text-[#7a7a7a] text-sm mt-6">
               Tap an answer to continue — no Next button. Use Previous to change a past answer.
             </p>
           )}

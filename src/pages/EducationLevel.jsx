@@ -38,7 +38,7 @@ function EducationLevel() {
   };
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex flex-col items-center justify-center">
+    <div className="min-h-screen pt-8 sm:pt-10 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex flex-col items-center justify-center">
       <motion.div
         className="glass-card p-10 sm:p-16 max-w-2xl w-full backdrop-blur-xl shadow-2xl career-glow text-center"
         initial={{ opacity: 0, y: 50 }}
@@ -46,13 +46,13 @@ function EducationLevel() {
         transition={{ duration: 0.8 }}
       >
         <div className="mb-12 sm:mb-16">
-          <div className="text-6xl sm:text-7xl mb-6 sm:mb-8 mx-auto w-28 h-28 sm:w-32 sm:h-32 bg-gradient-to-br from-violet-600 to-purple-800 rounded-3xl flex items-center justify-center shadow-2xl career-glow">
+          <div className="text-6xl sm:text-7xl mb-6 sm:mb-8 mx-auto w-28 h-28 sm:w-32 sm:h-32 bg-gradient-to-br from-[#0056d2] to-[#003a9b] rounded-3xl flex items-center justify-center shadow-2xl career-glow">
             {isCareer ? "🧭" : "📚"}
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4 sm:mb-6">
+          <h1 className="text-3xl sm:text-5xl font-bold bg-gradient-to-r from-[#003a9b] via-[#0056d2] to-[#2f7de1] bg-clip-text text-transparent mb-4 sm:mb-6">
             {isCareer ? "Career Related Guidance" : "Your Education Journey"}
           </h1>
-          <p className="text-base sm:text-xl text-white/80 max-w-lg mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-[#5b5b5b] max-w-lg mx-auto leading-relaxed">
             {isCareer
               ? !matricCompleted
                 ? "First tell us what you have already studied — start with Matric marks, then Intermediate."
@@ -72,7 +72,7 @@ function EducationLevel() {
         >
           <motion.button
             type="button"
-            className="group glass-card p-8 sm:p-12 hover:bg-white/20 backdrop-blur-xl border-2 border-white/30 hover:border-blue-400 hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-500 relative overflow-hidden w-full min-h-[220px] sm:min-h-[288px] flex flex-col items-center justify-center text-center"
+            className="group glass-card p-8 sm:p-12 hover:bg-[#0056d2]/10 backdrop-blur-xl border-2 border-[#d9d9d9] hover:border-[#2f7de1] hover:shadow-2xl hover:shadow-[#0056d2]/20 transition-all duration-500 relative overflow-hidden w-full min-h-[220px] sm:min-h-[288px] flex flex-col items-center justify-center text-center"
             onClick={handleMatricClick}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -82,19 +82,19 @@ function EducationLevel() {
             <div className="text-5xl sm:text-6xl mb-5 group-hover:scale-110 transition-transform">
               🎓
             </div>
-            <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+            <h3 className="text-2xl sm:text-3xl font-bold text-[#1a1a1a] mb-3 group-hover:text-[#2f7de1] transition-colors">
               Matric
             </h3>
-            <p className="text-white/70 text-base sm:text-lg min-h-[1.75rem]">
+            <p className="text-[#5b5b5b] text-base sm:text-lg min-h-[1.75rem]">
               {!matricCompleted ? "Do this first" : "Change / check"}
             </p>
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-500/25 to-indigo-500/25 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0056d2]/25 to-[#378edd]/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
           </motion.button>
 
           {matricCompleted && (
             <motion.button
               type="button"
-              className="group glass-card p-8 sm:p-12 hover:bg-white/20 backdrop-blur-xl border-2 border-white/30 hover:border-purple-400 hover:shadow-2xl hover:shadow-purple-500/30 transition-all duration-500 relative overflow-hidden w-full min-h-[220px] sm:min-h-[288px] flex flex-col items-center justify-center text-center"
+              className="group glass-card p-8 sm:p-12 hover:bg-[#0056d2]/10 backdrop-blur-xl border-2 border-[#d9d9d9] hover:border-[#378edd] hover:shadow-2xl hover:shadow-[#0056d2]/20 transition-all duration-500 relative overflow-hidden w-full min-h-[220px] sm:min-h-[288px] flex flex-col items-center justify-center text-center"
               onClick={handleIntermediateClick}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -105,20 +105,20 @@ function EducationLevel() {
               <div className="text-5xl sm:text-6xl mb-5 group-hover:scale-110 transition-transform">
                 🏆
               </div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors">
+              <h3 className="text-2xl sm:text-3xl font-bold text-[#1a1a1a] mb-3 group-hover:text-[#9ec5ff] transition-colors">
                 Intermediate
               </h3>
-              <p className="text-white/70 text-base sm:text-lg min-h-[1.75rem]">
+              <p className="text-[#5b5b5b] text-base sm:text-lg min-h-[1.75rem]">
                 {isCareer ? "Required for career match" : "After Matric (FSc etc.)"}
               </p>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/25 to-violet-400/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#2f7de1]/25 to-[#0056d2]/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl" />
             </motion.button>
           )}
         </div>
 
         {!matricCompleted ? (
           <motion.p
-            className="mt-12 sm:mt-16 text-base sm:text-lg text-white/60 max-w-lg text-center bg-yellow-500/20 p-4 rounded-2xl border border-yellow-400/30"
+            className="mt-12 sm:mt-16 text-base sm:text-lg text-[#6a6a6a] max-w-lg text-center bg-yellow-500/20 p-4 rounded-2xl border border-yellow-400/30"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -129,7 +129,7 @@ function EducationLevel() {
           </motion.p>
         ) : (
           <motion.p
-            className="mt-12 sm:mt-16 text-base sm:text-lg text-white/60 max-w-lg text-center"
+            className="mt-12 sm:mt-16 text-base sm:text-lg text-[#6a6a6a] max-w-lg text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -142,7 +142,7 @@ function EducationLevel() {
 
         <motion.button
           type="button"
-          className="mt-8 text-white/55 hover:text-white/90 text-sm transition-colors"
+          className="mt-8 text-[#6a6a6a] hover:text-[#1a1a1a] text-sm transition-colors"
           onClick={() => navigate("/guidance")}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

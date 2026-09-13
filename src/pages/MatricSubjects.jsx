@@ -113,17 +113,17 @@ function MatricSubjects() {
             className="text-center mb-16"
           >
             <div className="text-5xl sm:text-6xl mb-4 sm:mb-6">📚</div>
-            <h3 className="text-2xl min-[321px]:text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-500 bg-clip-text text-transparent mb-3 sm:mb-4 px-1 break-anywhere">
+            <h3 className="text-2xl min-[321px]:text-4xl sm:text-5xl md:text-6xl font-black bg-gradient-to-r from-[#003a9b] via-[#0056d2] to-[#2f7de1] bg-clip-text text-transparent mb-3 sm:mb-4 px-1 break-anywhere">
               Matric Subjects
             </h3>
-            <p className="text-base sm:text-xl text-white/70 max-w-lg mx-auto px-1">
-              Type your <span className="font-semibold text-emerald-300">percentage</span> for each subject (
-              {stream?.toUpperCase()}). Use numbers from <span className="text-emerald-300 font-semibold">{MARK_MIN}</span>{" "}
-              (pass) to <span className="text-emerald-300 font-semibold">{MARK_MAX}</span> (full marks).
+            <p className="text-base sm:text-xl text-[#5b5b5b] max-w-lg mx-auto px-1">
+              Type your <span className="font-semibold text-[#9ec5ff]">percentage</span> for each subject (
+              {stream?.toUpperCase()}). Use numbers from <span className="text-[#9ec5ff] font-semibold">{MARK_MIN}</span>{" "}
+              (pass) to <span className="text-[#9ec5ff] font-semibold">{MARK_MAX}</span> (full marks).
             </p>
-            <div className="w-full bg-white/10 backdrop-blur-sm h-2 rounded-full mt-8 overflow-hidden">
+            <div className="w-full bg-[#eef5ff] backdrop-blur-sm h-2 rounded-full mt-8 overflow-hidden">
               <motion.div 
-                className="h-full bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full"
+                className="h-full bg-gradient-to-r from-[#0056d2] to-[#378edd] rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${(filledCount / subjects.length) * 100}%` }}
                 transition={{ duration: 0.5 }}
@@ -155,11 +155,11 @@ function MatricSubjects() {
                       className={`w-full p-5 bg-transparent border-none outline-none text-2xl font-semibold text-center transition-all duration-300 peer ${
                         isMarkFieldInvalid(marks[sub])
                           ? "text-red-200 placeholder-red-300/50"
-                          : "text-white/90 placeholder-white/50"
+                          : "text-[#1a1a1a] placeholder-white/50"
                       }`}
                       placeholder={`${MARK_MIN}–${MARK_MAX} (%)`}
                     />
-                    <label className="absolute left-5 top-5 text-lg text-white/50 transition-all duration-300 peer-focus:-top-2 peer-focus:text-sm peer-focus:text-emerald-400 peer-valid:-top-2 peer-valid:text-sm peer-valid:text-emerald-400">
+                    <label className="absolute left-5 top-5 text-lg text-[#6a6a6a] transition-all duration-300 peer-focus:-top-2 peer-focus:text-sm peer-focus:text-[#2f7de1] peer-valid:-top-2 peer-valid:text-sm peer-valid:text-[#2f7de1]">
                       {sub}
                     </label>
                     {isMarkFieldInvalid(marks[sub]) && (
@@ -179,7 +179,7 @@ function MatricSubjects() {
             <AnimatedButton
               onClick={handleSubmit}
               disabled={filledCount !== subjects.length || !allMarksValid}
-              className="px-16 py-6 text-xl font-bold bg-gradient-to-r from-emerald-500 to-blue-600 hover:from-emerald-600 hover:to-blue-700 shadow-2xl disabled:opacity-40 disabled:pointer-events-none"
+              className="px-16 py-6 text-xl font-bold bg-gradient-to-r from-[#0056d2] to-[#2f7de1] text-white hover:from-[#2f7de1] hover:to-[#378edd] shadow-2xl disabled:opacity-40 disabled:pointer-events-none"
             >
               {isStudyMode && studyGoal === "inter"
                 ? "See Inter recommendations"

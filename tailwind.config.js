@@ -15,13 +15,18 @@ module.exports = {
     extend: {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
+        outfit: ['Outfit', 'sans-serif'],
       },
       colors: {
-        'career-primary': '#4f46e5',
-        'career-secondary': '#7c3aed',
-        'career-accent': '#10b981',
-        'glass-bg': 'rgba(255, 255, 255, 0.1)',
-        'glass-border': 'rgba(255, 255, 255, 0.2)',
+        'career-primary': '#E11D74',
+        'career-secondary': '#F43F8A',
+        'career-accent': '#FF2D87',
+        'bg-main': '#0D050A',
+        'bg-card': '#170A12',
+        'text-secondary': '#D8C7D0',
+        'theme-border': '#3A1728',
+        'glass-bg': 'rgba(23, 10, 18, 0.85)',
+        'glass-border': '#3A1728',
       },
       backdropBlur: {
         xs: '2px',
@@ -39,14 +44,14 @@ module.exports = {
         'thick': '12px',
       },
       scrollbarTrack: {
-        DEFAULT: 'rgba(255, 255, 255, 0.05)',
-        'hover': 'rgba(255, 255, 255, 0.1)',
-        'glass': 'rgba(255, 255, 255, 0.02)',
+        DEFAULT: 'rgba(13, 5, 10, 0.8)',
+        'hover': 'rgba(58, 23, 40, 0.5)',
+        'glass': 'rgba(23, 10, 18, 0.4)',
       },
       scrollbarThumb: {
-        DEFAULT: 'linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.1))',
-        'hover': 'linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0.2))',
-        'active': 'linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.4))',
+        DEFAULT: 'linear-gradient(to bottom, rgba(244,63,138,0.7), rgba(225,29,116,0.4))',
+        'hover': 'linear-gradient(to bottom, rgba(255,45,135,0.85), rgba(244,63,138,0.5))',
+        'active': 'linear-gradient(to bottom, rgba(255,107,168,0.9), rgba(225,29,116,0.6))',
       },
 
       keyframes: {
@@ -59,8 +64,8 @@ module.exports = {
           '100%': { transform: 'rotate(360deg) translateX(100px) rotate(-360deg)' },
         },
         pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(79, 70, 229, 0.3)' },
-          '50%': { boxShadow: '0 0 40px rgba(79, 70, 229, 0.6)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(225, 29, 116, 0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(255, 45, 135, 0.55)' },
         },
         shimmer: {
           '0%': { transform: 'translateX(-100%)' },
@@ -75,4 +80,3 @@ module.exports = {
   },
   plugins: [],
 }
-

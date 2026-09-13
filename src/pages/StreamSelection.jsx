@@ -13,28 +13,28 @@ function StreamSelection() {
       id: "bio",
       title: "Science (Biology)",
       subtitle: "Medical, Biotech, Life Sciences",
-      color: "from-emerald-500 to-teal-600",
+      color: "from-[#0056d2] to-[#0044a8]",
       icon: "🧬",
-      border: "hover:border-emerald-400 hover:shadow-emerald-500/30",
-      gradient: "from-emerald-500/20 to-teal-500/20"
+      border: "hover:border-[#2f7de1] hover:shadow-[#0056d2]/20",
+      gradient: "from-[#0056d2]/20 to-[#2f7de1]/20"
     },
     {
       id: "cs",
       title: "Science (Computer)",
       subtitle: "Engineering, IT, Software Development",
-      color: "from-blue-500 to-indigo-600",
+      color: "from-[#2f7de1] to-[#0056d2]",
       icon: "💻",
-      border: "hover:border-blue-400 hover:shadow-blue-500/30",
-      gradient: "from-blue-500/20 to-indigo-500/20"
+      border: "hover:border-[#378edd] hover:shadow-[#0056d2]/20",
+      gradient: "from-[#2f7de1]/20 to-[#378edd]/20"
     },
     {
       id: "arts",
       title: "Arts & Commerce",
       subtitle: "Business, Law, Design, Humanities",
-      color: "from-orange-500 to-red-600",
+      color: "from-[#378edd] to-[#003a9b]",
       icon: "🎨",
-      border: "hover:border-orange-400 hover:shadow-orange-500/30",
-      gradient: "from-orange-500/20 to-red-500/20"
+      border: "hover:border-[#0056d2] hover:shadow-[#0056d2]/20",
+      gradient: "from-[#378edd]/20 to-[#0056d2]/20"
     }
   ];
 
@@ -44,7 +44,7 @@ function StreamSelection() {
   };
 
   return (
-    <div className="min-h-screen pt-24 sm:pt-32 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex flex-col items-center justify-center">
+    <div className="min-h-screen pt-8 sm:pt-10 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4 flex flex-col items-center justify-center">
       <motion.div
         className="glass-card p-16 max-w-4xl w-full backdrop-blur-xl shadow-2xl career-glow text-center"
         initial={{ opacity: 0, y: 50 }}
@@ -52,18 +52,18 @@ function StreamSelection() {
         transition={{ duration: 0.8 }}
       >
         <div className="mb-16">
-          <div className={`text-7xl mb-8 mx-auto w-32 h-32 bg-gradient-to-br ${streams.find(s => s.id === reviewStream)?.color || 'from-emerald-500 to-teal-600'} rounded-3xl flex items-center justify-center shadow-2xl career-glow`}>
+          <div className={`text-7xl mb-8 mx-auto w-32 h-32 bg-gradient-to-br ${streams.find(s => s.id === reviewStream)?.color || 'from-[#0056d2] to-[#0044a8]'} rounded-3xl flex items-center justify-center shadow-2xl career-glow`}>
             {isReviewMode ? '✏️' : '🌿'}
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-400 bg-clip-text text-transparent mb-6">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-[#003a9b] via-[#0056d2] to-[#2f7de1] bg-clip-text text-transparent mb-6">
             {isReviewMode ? 'Review Your Stream' : 'Choose Your Stream'}
           </h1>
           {isReviewMode ? (
-            <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Edit marks for your <span className="font-bold text-emerald-400">{reviewStream?.toUpperCase()}</span> stream
+            <p className="text-xl text-[#2b2b2b] max-w-2xl mx-auto leading-relaxed">
+              Edit marks for your <span className="font-bold text-[#2f7de1]">{reviewStream?.toUpperCase()}</span> stream
             </p>
           ) : (
-            <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-[#2b2b2b] max-w-2xl mx-auto leading-relaxed">
               Select the stream you studied in Matric - this shapes your next recommendations
             </p>
           )}
@@ -77,12 +77,12 @@ function StreamSelection() {
               <motion.button
                 key={stream.id}
                 className={`
-                  group glass-card p-12 backdrop-blur-xl border-2 border-white/30 transition-all duration-500 relative overflow-hidden h-64 flex flex-col items-center justify-center
+                  group glass-card p-12 backdrop-blur-xl border-2 border-[#d9d9d9] transition-all duration-500 relative overflow-hidden h-64 flex flex-col items-center justify-center
                   ${isSelected 
-                    ? 'border-emerald-400 bg-emerald-500/20 ring-4 ring-emerald-400/50 shadow-2xl shadow-emerald-500/50 cursor-pointer' 
+                    ? 'border-[#2f7de1] bg-[#0056d2]/20 ring-4 ring-[#378edd]/50 shadow-2xl shadow-[#0056d2]/50 cursor-pointer' 
                     : isDisabled 
-                      ? 'opacity-50 cursor-not-allowed hover:opacity-50 hover:scale-100 hover:border-gray-500/50 hover:shadow-none' 
-                      : `hover:bg-white/20 ${stream.border}`
+                      ? 'opacity-50 cursor-not-allowed hover:opacity-50 hover:scale-100 hover:border-[#d9d9d9] hover:shadow-none' 
+                      : `hover:bg-[#0056d2]/12 ${stream.border}`
                   }
                   ${isDisabled ? '' : 'hover:shadow-2xl'}
                 `}
@@ -94,12 +94,12 @@ function StreamSelection() {
                 whileTap={isDisabled ? {} : { scale: 0.98 }}
               >
                 <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">{stream.icon}</div>
-                <h3 className={`text-3xl font-bold mb-4 transition-colors ${isSelected ? 'text-emerald-300 drop-shadow-lg' : isDisabled ? 'text-white/60' : 'text-white group-hover:text-emerald-400'}`}>{stream.title}</h3>
-                <p className={`text-lg transition-opacity ${isDisabled ? 'text-white/40' : 'text-white/70'}`}>
+                <h3 className={`text-3xl font-bold mb-4 transition-colors ${isSelected ? 'text-[#9ec5ff] drop-shadow-lg' : isDisabled ? 'text-[#6a6a6a]' : 'text-[#1a1a1a] group-hover:text-[#2f7de1]'}`}>{stream.title}</h3>
+                <p className={`text-lg transition-opacity ${isDisabled ? 'text-[#8a8a8a]' : 'text-[#5b5b5b]'}`}>
                   {isSelected ? 'Click to Review/Edit Marks' : stream.subtitle}
                 </p>
                 {isSelected && (
-                  <div className="absolute -top-4 -right-4 bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+                  <div className="absolute -top-4 -right-4 bg-[#0056d2] text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
                     SELECTED
                   </div>
                 )}
@@ -111,7 +111,7 @@ function StreamSelection() {
 
         {isReviewMode && (
           <motion.p 
-            className="mt-16 text-lg text-emerald-400/90 max-w-2xl text-center bg-emerald-500/10 p-4 rounded-2xl border border-emerald-400/30 font-semibold"
+            className="mt-16 text-lg text-[#9ec5ff] max-w-2xl text-center bg-[#0056d2]/10 p-4 rounded-2xl border border-[#2f7de1]/30 font-semibold"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
@@ -121,7 +121,7 @@ function StreamSelection() {
         )}
         {!isReviewMode && (
           <motion.p 
-            className="mt-16 text-lg text-white/60 max-w-2xl text-center"
+            className="mt-16 text-lg text-[#6a6a6a] max-w-2xl text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}

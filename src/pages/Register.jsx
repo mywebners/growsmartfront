@@ -1,31 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 function Register() {
-
   const [form, setForm] = useState({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
+  const [loading, setLoading] = useState(false);
 
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.from || "/guidance";
 
-  const handleSubmit = async () => {
-
+  const handleSubmit = async (e) => {
+    e?.preventDefault?.();
+    setLoading(true);
     try {
-      await axios.post(
-        "http://127.0.0.1:5000/auth/register",
-        form
-      );
+      // Register API now returns token + name → auto sign-in (no login page)
+      const res = await axios.post("http://127.0.0.1:5000/auth/register", {
+        name: form.name.trim(),
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+      });
 
-      alert("Registered successfully");
-      navigate("/login");
+      if (!res.data?.token) {
+        alert(res.data?.message || "Registered but login failed. Please sign in.");
+        navigate("/login", { state: { from: redirectTo } });
+        return;
+      }
 
+      // JWT + GET /auth/me (profile + empty history for new user)
+      await login(res.data.token, res.data.name, {
+        email: res.data.email,
+        image: res.data.image,
+      });
+      navigate(redirectTo, { replace: true });
     } catch (err) {
-      alert("Registration failed");
+      alert(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,7 +68,7 @@ function Register() {
           <p className="text-[#5b5b5b]">Join thousands discovering their dream careers</p>
         </motion.div>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit} autoComplete="on">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -58,10 +76,12 @@ function Register() {
           >
             <input
               type="text"
+              name="name"
               placeholder="Full Name"
               className="input-field"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
+              required
             />
           </motion.div>
 
@@ -72,10 +92,13 @@ function Register() {
           >
             <input
               type="email"
+              name="email"
               placeholder="Email Address"
               className="input-field"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+              autoComplete="username"
             />
           </motion.div>
 
@@ -84,12 +107,17 @@ function Register() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6 }}
           >
+            {/* type=password masks on screen; Network tab still shows JSON body (browser DevTools — cannot hide from yourself) */}
             <input
               type="password"
+              name="password"
               placeholder="Create Password"
               className="input-field"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+              minLength={6}
+              autoComplete="new-password"
             />
           </motion.div>
 
@@ -99,11 +127,11 @@ function Register() {
             transition={{ delay: 0.7 }}
           >
             <button
-              type="button"
-              onClick={handleSubmit}
-              className="btn-career w-full text-lg py-5 shadow-2xl hover:shadow-[#2f7de1]/40"
+              type="submit"
+              disabled={loading}
+              className="btn-career w-full text-lg py-5 shadow-2xl hover:shadow-[#2f7de1]/40 disabled:opacity-60"
             >
-              Create Account
+              {loading ? "Creating account…" : "Create Account"}
             </button>
           </motion.div>
 
@@ -114,8 +142,9 @@ function Register() {
             transition={{ delay: 0.8 }}
           >
             <button
+              type="button"
               className="text-[#2f7de1] hover:text-[#378edd] text-sm font-medium underline"
-              onClick={() => navigate('/login')}
+              onClick={() => navigate("/login")}
             >
               Already have an account? Sign In
             </button>

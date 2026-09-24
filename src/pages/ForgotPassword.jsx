@@ -21,9 +21,12 @@ function ForgotPassword() {
     setLoading(true);
     try {
       const res = await axios.post("http://127.0.0.1:5000/auth/forgot-password", {
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
       });
-      setMessage(res.data?.message || "Check your email for next steps.");
+      setMessage(
+        res.data?.message ||
+          "If that email is registered, a reset link has been sent. Check your inbox."
+      );
     } catch (err) {
       setError(err.response?.data?.message || "Request failed. Try again.");
     } finally {
@@ -45,7 +48,7 @@ function ForgotPassword() {
             Forgot password
           </h1>
           <p className="text-[#5b5b5b] text-sm">
-            Enter the email you registered with. If it exists, your password will be reset.
+            Enter your registered email. We will send a secure link to set a new password.
           </p>
         </div>
 
@@ -57,13 +60,12 @@ function ForgotPassword() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="email"
+            required
           />
 
-          {error && (
-            <p className="text-red-400 text-sm text-center">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           {message && (
-            <p className="text-[#9ec5ff] text-sm text-center bg-[#0056d2]/10 rounded-xl p-4 border border-[#0056d2]/30">
+            <p className="text-[#0b1f44] text-sm text-center bg-[#eef5ff] rounded-xl p-4 border border-[#b7d0f5]">
               {message}
             </p>
           )}
@@ -73,7 +75,7 @@ function ForgotPassword() {
             disabled={loading}
             className="btn-career w-full text-lg py-5 shadow-xl disabled:opacity-60"
           >
-            {loading ? "Sending…" : "Reset password"}
+            {loading ? "Sending link…" : "Send reset link"}
           </button>
 
           <div className="text-center space-y-2">

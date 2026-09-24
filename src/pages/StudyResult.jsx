@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -6,6 +6,7 @@ import {
   recommendIntermediate,
   recommendBachelor,
 } from "../utils/studyRules";
+import { saveUserGuidance } from "../utils/api";
 
 const RANK_COLORS = [
   "from-[#0056d2] to-[#378edd]",
@@ -54,6 +55,41 @@ function StudyResult() {
     matricStream,
     matricMarks,
     intermediateStream,
+    intermediateMarks,
+  ]);
+
+  const savedRef = useRef(false);
+  useEffect(() => {
+    if (!result?.recommendations?.length || savedRef.current) return;
+    savedRef.current = true;
+    (async () => {
+      try {
+        const topTitle = result.recommendations[0]?.title || "Study guidance";
+        await saveUserGuidance({
+          type: "study",
+          title: topTitle,
+          studyResult: result,
+          matric: {
+            stream: matricStream,
+            marks: matricMarks?.[matricStream] || {},
+          },
+          intermediate: {
+            stream: intermediateStream,
+            marks: intermediateMarks?.[intermediateStream] || {},
+          },
+          payload: { studyGoal },
+        });
+      } catch (err) {
+        console.error("Failed to save study guidance:", err);
+        savedRef.current = false;
+      }
+    })();
+  }, [
+    result,
+    studyGoal,
+    matricStream,
+    intermediateStream,
+    matricMarks,
     intermediateMarks,
   ]);
 

@@ -5,8 +5,8 @@ import { AuthContext } from "../context/AuthContext";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
 import { ArrowLeft, ClipboardList, Sparkles, X, ChevronDown, ChevronUp } from "lucide-react";
-import { addHistoryEntry, createHistoryEntry } from "../utils/historyStorage";
 import { SKILL_QUESTION_BY_ID } from "../utils/skillsQuestions";
+import { saveUserGuidance } from "../utils/api";
 
 const RANK_STYLES = [
   "from-[#0056d2] to-[#378edd]",
@@ -63,27 +63,38 @@ function Result() {
 
   useEffect(() => {
     if (!career || hasSavedRef.current) return;
-
-    const entry = createHistoryEntry({
-      user,
-      career,
-      topCareers: rankedCareers,
-      fullData: data,
-      skillsRaw,
-      skillsQuestionMap: SKILL_QUESTION_BY_ID,
-      skillsConverted,
-      matricInfo: {
-        stream: matricStream,
-        marks: matricMarks?.[matricStream] || {},
-      },
-      intermediateInfo: {
-        stream: intermediateStream,
-        marks: intermediateMarks?.[intermediateStream] || {},
-      },
-    });
-
-    addHistoryEntry(user, entry);
+    // Already saved inside /predict-career when JWT was sent
+    if (location.state?.savedToAccount || location.state?.savedGuidanceId) {
+      hasSavedRef.current = true;
+      return;
+    }
     hasSavedRef.current = true;
+
+    (async () => {
+      try {
+        await saveUserGuidance({
+          type: "career",
+          title: career,
+          career,
+          topCareers: rankedCareers,
+          fullData: data,
+          skillsRaw,
+          skillsQuestionMap: SKILL_QUESTION_BY_ID,
+          skillsConverted,
+          matric: {
+            stream: matricStream,
+            marks: matricMarks?.[matricStream] || {},
+          },
+          intermediate: {
+            stream: intermediateStream,
+            marks: intermediateMarks?.[intermediateStream] || {},
+          },
+        });
+      } catch (err) {
+        console.error("Failed to save career guidance to account:", err);
+        hasSavedRef.current = false;
+      }
+    })();
   }, [
     career,
     user,
@@ -95,6 +106,7 @@ function Result() {
     intermediateStream,
     matricMarks,
     intermediateMarks,
+    location.state,
   ]);
 
   if (!career) {

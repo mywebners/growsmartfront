@@ -4,7 +4,11 @@ import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
-import { SKILL_QUESTIONS, SKILL_DIMENSIONS } from "../utils/skillsQuestions";
+import {
+  SKILL_QUESTIONS,
+  SKILL_DIMENSIONS,
+  likertToKaggleSkill,
+} from "../utils/skillsQuestions";
 
 const options = [
   { value: 1, label: "Not really", emoji: "😴" },
@@ -114,13 +118,6 @@ function SkillsTest() {
     }
   };
 
-  const convertSkill = (value) => {
-    const num = Number(value);
-    if (num <= 2) return "LOW";
-    if (num === 3) return "MEDIUM";
-    return "HIGH";
-  };
-
   const handleSubmit = async () => {
     if (
       currentQuestion !== questions.length - 1 ||
@@ -132,11 +129,11 @@ function SkillsTest() {
 
     setIsSubmitting(true);
     const groupedAverages = aggregateDimensionScores();
+    // Send Kaggle Excel scale (0–20), same columns the MLP was trained on.
     const finalSkills = {};
     Object.keys(groupedAverages).forEach((key) => {
-      finalSkills[key] = convertSkill(groupedAverages[key]);
+      finalSkills[key] = likertToKaggleSkill(groupedAverages[key]);
     });
-    // Model also accepts alternate column names from training dataset
     finalSkills["Logical - Mathematical"] = finalSkills.Logical;
     finalSkills["Spatial-Visualization"] = finalSkills.Spatial;
 
@@ -155,10 +152,17 @@ function SkillsTest() {
     };
 
     try {
+      const token = localStorage.getItem("token") || "";
       const response = await fetch("http://127.0.0.1:5000/predict-career", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(finalData),
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          ...finalData,
+          skillsRaw: answers,
+        }),
       });
 
       const result = await response.json();
@@ -181,6 +185,8 @@ function SkillsTest() {
             groupedAverages,
             skillsConverted: finalSkills,
             questionsSource,
+            savedToAccount: !!result.saved_to_account,
+            savedGuidanceId: result.saved_guidance_id || null,
           },
         });
       }, 900);

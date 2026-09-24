@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
+import { saveUserGuidance } from "../utils/api";
 
 const PLATFORM_COLORS = {
   linkedin: "from-[#2f7de1] to-[#0056d2]",
@@ -17,6 +18,7 @@ function CareerScope() {
   const navigate = useNavigate();
   const career = location.state?.career;
   const scope = location.state?.scope;
+  const savedRef = useRef(false);
 
   const platforms = useMemo(() => {
     const portalMeta = scope?.portals || [];
@@ -27,6 +29,24 @@ function CareerScope() {
       color: PLATFORM_COLORS[p.id] || "from-slate-400 to-slate-600",
     }));
   }, [scope]);
+
+  useEffect(() => {
+    if (!career || !scope || savedRef.current) return;
+    savedRef.current = true;
+    (async () => {
+      try {
+        await saveUserGuidance({
+          type: "scope",
+          title: `Scope · ${career}`,
+          career,
+          payload: { scope },
+        });
+      } catch (err) {
+        console.error("Failed to save scope:", err);
+        savedRef.current = false;
+      }
+    })();
+  }, [career, scope]);
 
   if (!career || !scope) {
     return (

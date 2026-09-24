@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
 import { resolveUniversityPortal } from "../utils/pakistanUniversities";
+import { saveUserGuidance } from "../utils/api";
 
 function normalizeInsightsPayload(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -100,6 +101,7 @@ function CareerInsights() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [data, setData] = useState(null);
+  const savedRef = useRef(false);
 
   const normalized = useMemo(() => normalizeInsightsPayload(data), [data]);
 
@@ -113,9 +115,13 @@ function CareerInsights() {
       setLoading(true);
       setError("");
       try {
+        const token = localStorage.getItem("token") || "";
         const res = await fetch("http://127.0.0.1:5000/career-insights", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
           body: JSON.stringify({ career }),
         });
         const json = await res.json();
@@ -129,6 +135,24 @@ function CareerInsights() {
     };
     run();
   }, [career, navigate]);
+
+  useEffect(() => {
+    if (!normalized || savedRef.current) return;
+    savedRef.current = true;
+    (async () => {
+      try {
+        await saveUserGuidance({
+          type: "insights",
+          title: `Insights · ${normalized.career || career}`,
+          career: normalized.career || career,
+          payload: { insights: normalized },
+        });
+      } catch (err) {
+        console.error("Failed to save insights:", err);
+        savedRef.current = false;
+      }
+    })();
+  }, [normalized, career]);
 
   return (
     <div className="min-h-screen pt-20 sm:pt-24 pb-16 sm:pb-20 px-3 xs:px-4 max-[320px]:px-2">

@@ -1,13 +1,39 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
+import { saveUserGuidance } from "../utils/api";
 
 function CvResult() {
   const location = useLocation();
   const navigate = useNavigate();
   const result = location.state?.result;
+  const payload = location.state?.payload;
+  const savedRef = useRef(false);
+
+  useEffect(() => {
+    if (!result || savedRef.current) return;
+    savedRef.current = true;
+    (async () => {
+      try {
+        await saveUserGuidance({
+          type: "cv",
+          title: result.header?.full_name || result.header?.headline || "US CV",
+          cvResult: {
+            header: result.header,
+            summary: result.summary,
+            skills: result.skills,
+            plain_text: result.plain_text,
+          },
+          payload: payload || {},
+        });
+      } catch (err) {
+        console.error("Failed to save CV to account:", err);
+        savedRef.current = false;
+      }
+    })();
+  }, [result, payload]);
 
   const header = result?.header || {};
   const contactLine = useMemo(() => {

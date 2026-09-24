@@ -76,13 +76,14 @@ function StreamSelection() {
             return (
               <motion.button
                 key={stream.id}
+                type="button"
                 className={`
-                  group glass-card p-12 backdrop-blur-xl border-2 border-[#d9d9d9] transition-all duration-500 relative overflow-hidden h-64 flex flex-col items-center justify-center
+                  stream-pick-card group glass-card p-12 backdrop-blur-xl border-2 border-[#d9d9d9] transition-all duration-500 relative overflow-hidden h-64 flex flex-col items-center justify-center bg-white
                   ${isSelected 
-                    ? 'border-[#2f7de1] bg-[#0056d2]/20 ring-4 ring-[#378edd]/50 shadow-2xl shadow-[#0056d2]/50 cursor-pointer' 
+                    ? 'border-[#2f7de1] bg-[#eef5ff] ring-4 ring-[#378edd]/40 shadow-2xl shadow-[#0056d2]/20 cursor-pointer' 
                     : isDisabled 
                       ? 'opacity-50 cursor-not-allowed hover:opacity-50 hover:scale-100 hover:border-[#d9d9d9] hover:shadow-none' 
-                      : `hover:bg-[#0056d2]/12 ${stream.border}`
+                      : `hover:bg-[#eef5ff] ${stream.border}`
                   }
                   ${isDisabled ? '' : 'hover:shadow-2xl'}
                 `}
@@ -93,17 +94,20 @@ function StreamSelection() {
                 whileHover={isDisabled ? {} : { scale: 1.05, y: -10 }}
                 whileTap={isDisabled ? {} : { scale: 0.98 }}
               >
-                <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">{stream.icon}</div>
-                <h3 className={`text-3xl font-bold mb-4 transition-colors ${isSelected ? 'text-[#9ec5ff] drop-shadow-lg' : isDisabled ? 'text-[#6a6a6a]' : 'text-[#1a1a1a] group-hover:text-[#2f7de1]'}`}>{stream.title}</h3>
-                <p className={`text-lg transition-opacity ${isDisabled ? 'text-[#8a8a8a]' : 'text-[#5b5b5b]'}`}>
-                  {isSelected ? 'Click to Review/Edit Marks' : stream.subtitle}
-                </p>
+                <div className="relative z-10 flex flex-col items-center justify-center">
+                  <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">{stream.icon}</div>
+                  <h3 className="text-3xl font-bold mb-4 text-[#111111]">
+                    {stream.title}
+                  </h3>
+                  <p className="text-lg text-[#222222]">
+                    {isSelected ? 'Click to Review/Edit Marks' : stream.subtitle}
+                  </p>
+                </div>
                 {isSelected && (
-                  <div className="absolute -top-4 -right-4 bg-[#0056d2] text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
+                  <div className="absolute -top-4 -right-4 z-20 bg-[#0056d2] text-white px-3 py-1 rounded-full text-xs font-bold animate-pulse">
                     SELECTED
                   </div>
                 )}
-                <div className={`absolute inset-0 bg-gradient-to-r ${stream.gradient} opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl ${isDisabled ? 'opacity-0' : ''}`} />
               </motion.button>
             );
           })}

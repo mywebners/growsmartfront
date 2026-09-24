@@ -1,25 +1,34 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
+import LoginRequiredModal from "../components/LoginRequiredModal";
+import EditProfileModal from "../components/EditProfileModal";
 
 const NAV_ITEMS = [
-  { id: "explore", label: "Explore", path: "/guidance" },
-  { id: "study", label: "Study", path: "/study/goal" },
-  { id: "careers", label: "Careers", path: "/education" },
-  { id: "jobs", label: "Jobs", path: "/jobs-guidance" },
+  { id: "explore", label: "Explore", path: "/guidance", needsAuth: true },
+  { id: "study", label: "Study", path: "/study/goal", needsAuth: true },
+  { id: "careers", label: "Careers", path: "/education", needsAuth: true },
+  { id: "jobs", label: "Jobs", path: "/jobs-guidance", needsAuth: true },
+  { id: "history", label: "History", path: "/history", needsAuth: true },
 ];
 
 function Navbar() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, profile, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [authFrom, setAuthFrom] = useState("/");
   const menuRef = useRef(null);
+
+  const displayName = profile?.name || user || "Account";
+  const avatar = profile?.image || "";
 
   const handleLogout = () => {
     setMenuOpen(false);
     logout();
-    navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   };
 
   useEffect(() => {
@@ -37,11 +46,29 @@ function Navbar() {
     navigate(path);
   };
 
+  const goNav = (item) => {
+    if (item.needsAuth && !user) {
+      setAuthFrom(item.path);
+      setAuthModalOpen(true);
+      return;
+    }
+    navigate(item.path);
+  };
+
   const isActive = (path) =>
     location.pathname === path || location.pathname.startsWith(`${path}/`);
 
   return (
     <header className="gs-topbar">
+      <LoginRequiredModal
+        open={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        fromPath={authFrom}
+        title="Please sign up to continue"
+        message="This feature uses your account (and AI / database where needed). Sign up so your results stay saved after logout."
+      />
+      <EditProfileModal open={editOpen} onClose={() => setEditOpen(false)} />
+
       <nav className="gs-main-nav">
         <div className="gs-main-nav-inner">
           <button type="button" className="gs-logo" onClick={() => navigate("/")}>
@@ -62,7 +89,7 @@ function Navbar() {
                 key={item.id}
                 type="button"
                 className={`gs-nav-link ${isActive(item.path) ? "is-active" : ""}`}
-                onClick={() => navigate(user ? item.path : "/login")}
+                onClick={() => goNav(item)}
               >
                 {item.label}
               </button>
@@ -84,32 +111,30 @@ function Navbar() {
                   aria-expanded={menuOpen}
                   onClick={() => setMenuOpen((open) => !open)}
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M4 20.5c0-3.59 3.582-6.5 8-6.5s8 2.91 8 6.5"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  {avatar ? (
+                    <img className="gs-account-avatar" src={avatar} alt="" />
+                  ) : (
+                    <span className="gs-account-initial">
+                      {displayName.charAt(0).toUpperCase()}
+                    </span>
+                  )}
                 </button>
 
                 <div className="gs-account-menu" role="menu">
                   <div className="gs-account-user">
-                    <strong>{user}</strong>
-                    <span>GrowSmart account</span>
+                    <strong>{displayName}</strong>
+                    <span>{profile?.email || "GrowSmart account"}</span>
                   </div>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setMenuOpen(false);
+                      setEditOpen(true);
+                    }}
+                  >
+                    Edit profile
+                  </button>
                   <button type="button" role="menuitem" onClick={() => go("/guidance")}>
                     Guidance Hub
                   </button>

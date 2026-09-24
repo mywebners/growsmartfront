@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import GuestOnlyRoute from "./components/GuestOnlyRoute";
 
 import Home from "./pages/Home";
 import Navbar from "./pages/Navbar";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 import EducationLevel from "./pages/EducationLevel";
 import StreamSelection from "./pages/StreamSelection";
@@ -35,7 +37,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 
 function AppLayout() {
   const location = useLocation();
-  const hideNavbarRoutes = ["/login", "/register", "/forgot-password"];
+  const hideNavbarRoutes = ["/login", "/register", "/forgot-password", "/reset-password"];
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   return (
@@ -44,9 +46,16 @@ function AppLayout() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login" element={
+          <GuestOnlyRoute><Login /></GuestOnlyRoute>
+        } />
+        <Route path="/register" element={
+          <GuestOnlyRoute><Register /></GuestOnlyRoute>
+        } />
+        <Route path="/forgot-password" element={
+          <GuestOnlyRoute><ForgotPassword /></GuestOnlyRoute>
+        } />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/guidance" element={
           <ProtectedRoute><GuidanceHub /></ProtectedRoute>

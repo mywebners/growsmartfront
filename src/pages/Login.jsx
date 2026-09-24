@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Login() {
 
@@ -13,19 +13,25 @@ function Login() {
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.from || "/guidance";
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e?.preventDefault?.();
 
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:5000/auth/login",
-        form
-      );
+      const res = await axios.post("http://127.0.0.1:5000/auth/login", {
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+      });
 
-      login(res.data.token, res.data.name);
+      // JWT → AuthContext, then GET /auth/me loads profile + full history
+      await login(res.data.token, res.data.name, {
+        email: res.data.email,
+        image: res.data.image,
+      });
 
-      navigate("/guidance", { replace: true });
-
+      navigate(redirectTo, { replace: true });
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
     }
@@ -52,7 +58,7 @@ function Login() {
           <p className="text-[#5b5b5b]">Sign in to use GrowSmart</p>
         </motion.div>
 
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmit} autoComplete="on">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -60,10 +66,13 @@ function Login() {
           >
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
               className="input-field"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+              autoComplete="username"
             />
           </motion.div>
 
@@ -74,10 +83,13 @@ function Login() {
           >
             <input
               type="password"
+              name="password"
               placeholder="Enter your password"
               className="input-field"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+              autoComplete="current-password"
             />
           </motion.div>
 
@@ -87,8 +99,7 @@ function Login() {
             transition={{ delay: 0.6 }}
           >
             <button
-              type="button"
-              onClick={handleSubmit}
+              type="submit"
               className="btn-career w-full text-lg py-5 shadow-2xl hover:shadow-[#2f7de1]/40"
             >
               Sign In

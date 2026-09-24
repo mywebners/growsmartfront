@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { getHistoryItems } from "../utils/historyStorage";
 import { AuthContext } from "../context/AuthContext";
+import LoginRequiredModal from "../components/LoginRequiredModal";
 
 const CAREER_QUOTES = [
   {
@@ -110,12 +110,13 @@ const DASHBOARD_LINKS = [
   },
   {
     id: "history",
-    tab: "tools",
+    tab: "all",
     title: "My History",
-    desc: "Review your saved guidance results and progress.",
+    desc: "All saved study, career, jobs & CV results on your account.",
     path: "/history",
     needsAuth: true,
     action: null,
+    featured: true,
   },
 ];
 
@@ -131,6 +132,10 @@ const TRUST_ITEMS = [
 function Home() {
   const navigate = useNavigate();
   const {
+    user,
+    token,
+    historyCounts,
+    guidanceHistory,
     resetAssessment,
     setGuidanceType,
     setStudyGoal,
@@ -138,18 +143,12 @@ function Home() {
   } = useContext(AuthContext);
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("all");
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authModalFrom, setAuthModalFrom] = useState("/");
 
-  const userData = localStorage.getItem("user");
-  let user = userData || null;
-
-  if (userData && userData.startsWith("{")) {
-    try {
-      const parsedUser = JSON.parse(userData);
-      user = parsedUser?.firstName || parsedUser?.name || userData;
-    } catch (e) {
-      console.error("Invalid user data in localStorage:", e);
-    }
-  }
+  const hasHistory =
+    (historyCounts?.total > 0) ||
+    (Array.isArray(guidanceHistory) && guidanceHistory.length > 0);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -158,39 +157,38 @@ function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  const hasHistory = user ? getHistoryItems(user).length > 0 : false;
-
   const visibleLinks = useMemo(() => {
     const filtered =
       activeTab === "all"
         ? DASHBOARD_LINKS
         : DASHBOARD_LINKS.filter(
-            (item) => item.tab === activeTab || item.id === "guidance"
+            (item) =>
+              item.tab === activeTab ||
+              item.id === "guidance" ||
+              item.id === "history"
           );
 
-    return filtered.filter((item) => {
-      if (item.id === "history" && !hasHistory) return false;
-      return true;
-    });
-  }, [activeTab, hasHistory]);
+    // Always keep History visible on dashboard (empty until first result)
+    return filtered;
+  }, [activeTab]);
 
-  const requireAuth = () => {
-    if (!user) {
-      alert("Please login first to start guidance");
-      navigate("/login");
+  const requireAuth = (fromPath = "/") => {
+    if (!user || !token) {
+      setAuthModalFrom(fromPath);
+      setAuthModalOpen(true);
       return false;
     }
     return true;
   };
 
   const handleStart = () => {
-    if (!requireAuth()) return;
+    if (!requireAuth("/guidance")) return;
     resetAssessment();
     navigate("/guidance", { replace: true });
   };
 
   const handleLink = (item) => {
-    if (item.needsAuth && !requireAuth()) return;
+    if (item.needsAuth && !requireAuth(item.path)) return;
 
     if (item.action === "hub") {
       resetAssessment();
@@ -214,6 +212,14 @@ function Home() {
 
   return (
     <div className="gs-home">
+      <LoginRequiredModal
+        open={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        fromPath={authModalFrom}
+        title="Please sign up to continue"
+        message="Guidance Hub, Career prediction, Jobs, CV Maker, Insights, and History need a free account so everything stays saved after you log out."
+      />
+
       <section className="gs-hero">
         <div className="gs-hero-inner">
           <div className="gs-hero-copy">
@@ -241,15 +247,15 @@ function Home() {
                 <button className="gs-btn-ghost" onClick={() => navigate("/login")}>
                   Log in
                 </button>
-              ) : hasHistory ? (
+              ) : (
                 <button className="gs-btn-ghost" onClick={() => navigate("/history")}>
-                  View history
+                  {hasHistory ? "View history" : "My history"}
                 </button>
-              ) : null}
+              )}
             </div>
 
             <p className="gs-hero-note">
-              Free to start · Personalized paths · AI-powered suggestions
+              Free to start · Results saved to your account · AI-powered suggestions
             </p>
           </div>
 
@@ -302,9 +308,22 @@ function Home() {
 
       <section className="gs-dashboard">
         <div className="gs-section-inner">
-          <div className="gs-dashboard-head">
-            <h2>Explore GrowSmart</h2>
-            <p>Open any path below — your personal guidance dashboard.</p>
+          <div className="gs-dashboard-head gs-dashboard-head-row">
+            <div>
+              <h2>Explore GrowSmart</h2>
+              <p>Open any path below — results stay on your account after logout.</p>
+            </div>
+            <button
+              type="button"
+              className="gs-history-chip"
+              onClick={() => {
+                if (!requireAuth("/history")) return;
+                navigate("/history");
+              }}
+            >
+              📋 My History
+              {hasHistory ? " · saved" : ""}
+            </button>
           </div>
 
           <div className="gs-tabs" role="tablist" aria-label="Dashboard categories">
@@ -327,7 +346,7 @@ function Home() {
               <motion.button
                 key={item.id}
                 type="button"
-                className="gs-link-card"
+                className={`gs-link-card ${item.id === "history" ? "gs-link-card-history" : ""}`}
                 onClick={() => handleLink(item)}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -335,7 +354,9 @@ function Home() {
               >
                 <span className="gs-link-title">{item.title}</span>
                 <span className="gs-link-desc">{item.desc}</span>
-                <span className="gs-link-cta">Open →</span>
+                <span className="gs-link-cta">
+                  {item.id === "history" ? "Open history →" : "Open →"}
+                </span>
               </motion.button>
             ))}
           </div>

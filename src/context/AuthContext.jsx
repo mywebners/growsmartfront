@@ -1,4 +1,5 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
+import { fetchMe, updateProfile as apiUpdateProfile } from "../utils/api";
 
 export const AuthContext = createContext();
 
@@ -15,6 +16,15 @@ function safeParseJSON(key, fallback) {
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [user, setUser] = useState(() => localStorage.getItem("user"));
+  const [profile, setProfile] = useState(() =>
+    safeParseJSON("profile", null)
+  );
+  const [guidanceHistory, setGuidanceHistory] = useState([]);
+  const [historyByType, setHistoryByType] = useState(null);
+  const [historyCounts, setHistoryCounts] = useState(null);
+  const [meLoading, setMeLoading] = useState(false);
+  const [meError, setMeError] = useState("");
+
   const [educationLevel, setEducationLevelState] = useState(
     () => localStorage.getItem("educationLevel") || null
   );
@@ -46,16 +56,91 @@ export const AuthProvider = ({ children }) => {
     () => localStorage.getItem("jobsGoal") || null
   );
 
-  const login = (tokenValue, name) => {
+  const applyMePayload = useCallback((data) => {
+    const p = data?.profile || null;
+    if (p) {
+      setProfile(p);
+      setUser(p.name || "");
+      localStorage.setItem("user", p.name || "");
+      localStorage.setItem("profile", JSON.stringify(p));
+    }
+    const list = Array.isArray(data?.guidance)
+      ? data.guidance
+      : Array.isArray(data?.history?.all)
+        ? data.history.all
+        : [];
+    setGuidanceHistory(list);
+    setHistoryByType(data?.history || null);
+    setHistoryCounts(data?.counts || null);
+  }, []);
+
+  const refreshMe = useCallback(
+    async (tokenOverride) => {
+      const t = tokenOverride || localStorage.getItem("token");
+      if (!t) {
+        setGuidanceHistory([]);
+        setHistoryByType(null);
+        setHistoryCounts(null);
+        return null;
+      }
+      setMeLoading(true);
+      setMeError("");
+      try {
+        const data = await fetchMe(t);
+        applyMePayload(data);
+        return data;
+      } catch (err) {
+        setMeError(err.message || "Could not load account");
+        if (err.status === 401) {
+          setToken(null);
+          setUser(null);
+          setProfile(null);
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          localStorage.removeItem("profile");
+        }
+        return null;
+      } finally {
+        setMeLoading(false);
+      }
+    },
+    [applyMePayload]
+  );
+
+  // After refresh / reopen: if JWT exists, load profile + history first
+  useEffect(() => {
+    if (token) {
+      refreshMe(token);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const login = async (tokenValue, name, extra = {}) => {
     setToken(tokenValue);
     setUser(name);
     localStorage.setItem("token", tokenValue);
     localStorage.setItem("user", name);
+    if (extra.email || extra.image !== undefined) {
+      const p = {
+        name,
+        email: extra.email || "",
+        image: extra.image || "",
+      };
+      setProfile(p);
+      localStorage.setItem("profile", JSON.stringify(p));
+    }
+    // First API after login
+    return refreshMe(tokenValue);
   };
 
   const logout = () => {
     setToken(null);
     setUser(null);
+    setProfile(null);
+    setGuidanceHistory([]);
+    setHistoryByType(null);
+    setHistoryCounts(null);
+    setMeError("");
     setEducationLevelState(null);
     setMatricDataState(null);
     setMatricCompletedState(false);
@@ -69,6 +154,7 @@ export const AuthProvider = ({ children }) => {
 
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("profile");
     localStorage.removeItem("educationLevel");
     localStorage.removeItem("matricData");
     localStorage.removeItem("matricCompleted");
@@ -79,6 +165,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("guidanceType");
     localStorage.removeItem("studyGoal");
     localStorage.removeItem("jobsGoal");
+  };
+
+  const updateProfile = async (body) => {
+    const data = await apiUpdateProfile(body);
+    applyMePayload(data);
+    return data;
   };
 
   const setEducationLevel = (level) => {
@@ -186,6 +278,14 @@ export const AuthProvider = ({ children }) => {
       value={{
         token,
         user,
+        profile,
+        guidanceHistory,
+        historyByType,
+        historyCounts,
+        meLoading,
+        meError,
+        refreshMe,
+        updateProfile,
         educationLevel,
         setEducationLevel,
         matricData,

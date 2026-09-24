@@ -494,7 +494,8 @@ code {
   color: #fff;
 }
 
-/* Force white text on solid / gradient blue action buttons site-wide */
+/* Force white text on solid / gradient blue action buttons site-wide.
+   Do NOT match soft tints like hover:bg-[#0056d2]/10 or glass-card. */
 .btn-career,
 .btn-career *,
 button.btn-career,
@@ -507,27 +508,146 @@ a.btn-career,
   color: #ffffff !important;
 }
 
-button[class*="from-[#0056d2]"],
-a[class*="from-[#0056d2]"],
-button[class*="via-[#2f7de1]"],
-button[class*="to-[#2f7de1]"],
-button[class*="bg-[#0056d2]"],
-a[class*="bg-[#0056d2]"],
-button[class*="bg-sky-500"],
-a[class*="bg-sky-500"],
-div[class*="from-[#0056d2]"][class*="rounded-2xl"],
-div[class*="from-[#0056d2]"][class*="rounded-xl"] {
+/* Light stream / choice cards: keep dark text */
+button.stream-pick-card,
+button.stream-pick-card *,
+.stream-pick-card,
+.stream-pick-card h3,
+.stream-pick-card p,
+.stream-pick-card span {
+  color: #111111 !important;
+}
+
+button.stream-pick-card:hover h3,
+button.stream-pick-card:hover p {
+  color: #0b1f44 !important;
+}
+
+button.stream-pick-card svg,
+.stream-pick-card svg {
+  color: #0056d2 !important;
+  stroke: #0056d2;
+}
+
+/* Solid blue / sky buttons only (exclude /10 /25 opacity utilities + glass) */
+button[class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"]):not(.stream-pick-card):not(.glass-card),
+a[class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"]):not(.glass-card),
+button[class*="via-[#2f7de1]"]:not([class*="via-[#2f7de1]/"]):not(.stream-pick-card):not(.glass-card),
+button[class*="to-[#2f7de1]"]:not([class*="to-[#2f7de1]/"]):not(.stream-pick-card):not(.glass-card),
+button[class*="bg-[#0056d2]"]:not([class*="bg-[#0056d2]/"]):not(.stream-pick-card):not(.glass-card),
+a[class*="bg-[#0056d2]"]:not([class*="bg-[#0056d2]/"]):not(.glass-card),
+button[class*="bg-sky-500"]:not([class*="bg-sky-500/"]):not(.glass-card),
+a[class*="bg-sky-500"]:not([class*="bg-sky-500/"]):not(.glass-card),
+div[class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"])[class*="rounded-2xl"],
+div[class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"])[class*="rounded-xl"] {
   color: #ffffff !important;
 }
 
-button[class*="from-[#0056d2]"] *,
-a[class*="from-[#0056d2]"] *,
-button[class*="bg-[#0056d2]"] *,
-a[class*="bg-[#0056d2]"] *,
-button[class*="bg-sky-500"] *,
-a[class*="bg-sky-500"] *,
-div[class*="from-[#0056d2]"][class*="rounded-2xl"] *,
-div[class*="from-[#0056d2]"][class*="rounded-xl"] * {
+button[class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"]):not(.stream-pick-card):not(.glass-card) *,
+a[class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"]):not(.glass-card) *,
+button[class*="bg-[#0056d2]"]:not([class*="bg-[#0056d2]/"]):not(.stream-pick-card):not(.glass-card) *,
+a[class*="bg-[#0056d2]"]:not([class*="bg-[#0056d2]/"]):not(.glass-card) *,
+button[class*="bg-sky-500"]:not([class*="bg-sky-500/"]):not(.glass-card) *,
+a[class*="bg-sky-500"]:not([class*="bg-sky-500/"]):not(.glass-card) *,
+div[class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"])[class*="rounded-2xl"] *,
+div[class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"])[class*="rounded-xl"] * {
+  color: #ffffff !important;
+}
+
+/*
+  White / light boxes everywhere:
+  - body text → dark (#1a1a1a)
+  - accents / icons / outline buttons → GrowSmart blue (#0056d2)
+  Matches scrollbar accent: scrollbar-color: #0056d2 #eef2f8
+*/
+.glass-card,
+.gs-modal-card,
+.bg-white,
+[class~="bg-white"] {
+  color: #1a1a1a;
+}
+
+.glass-card h1,
+.glass-card h2,
+.glass-card h3,
+.glass-card h4,
+.glass-card strong,
+.gs-modal-card h1,
+.gs-modal-card h2 {
+  color: #1a1a1a;
+}
+
+.glass-card p,
+.glass-card span:not([class*="text-"]),
+.glass-card li,
+.glass-card label,
+.gs-modal-card p,
+.gs-modal-card span:not([class*="text-"]),
+.gs-modal-card label {
+  color: inherit;
+}
+
+/* Icons inside white / glass surfaces → blue */
+.glass-card > svg,
+.glass-card button > svg,
+.glass-card a > svg,
+.glass-card .lucide,
+button.glass-card svg,
+a.glass-card svg,
+.rounded-full.glass-card svg,
+.gs-modal-card svg,
+.bg-white svg,
+button.bg-white svg {
+  color: #0056d2 !important;
+  stroke: currentColor;
+}
+
+/* White / glass secondary buttons → blue text + icons */
+button.glass-card,
+a.glass-card,
+.glass-card.px-6.py-3,
+button[class*="glass-card"][class*="px-"],
+a[class*="glass-card"][class*="px-"] {
+  color: #0056d2 !important;
+}
+
+button.glass-card *,
+a.glass-card * {
+  color: inherit !important;
+}
+
+button.glass-card svg,
+a.glass-card svg {
+  color: #0056d2 !important;
+  stroke: currentColor;
+}
+
+/* Soft tint chips on white cards (not solid fills) → blue text */
+.glass-card [class*="bg-[#0056d2]/"],
+.glass-card [class*="bg-sky-500/"],
+.glass-card [class*="hover:bg-[#0056d2]/"] {
+  color: #0056d2 !important;
+}
+
+.glass-card [class*="bg-red-"] {
+  color: #c62828 !important;
+}
+
+.glass-card [class*="bg-red-"] svg {
+  color: #c62828 !important;
+  stroke: currentColor;
+}
+
+/* Solid blue badges INSIDE glass cards keep white text */
+.glass-card [class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"]),
+.glass-card [class*="bg-[#0056d2]"]:not([class*="bg-[#0056d2]/"]),
+.glass-card [class*="bg-sky-500"]:not([class*="bg-sky-500/"]) {
+  color: #ffffff !important;
+}
+
+.glass-card [class*="from-[#0056d2]"]:not([class*="from-[#0056d2]/"]) *,
+.glass-card [class*="bg-[#0056d2]"]:not([class*="bg-[#0056d2]/"]) *,
+.glass-card [class*="bg-sky-500"]:not([class*="bg-sky-500/"]) * {
   color: #ffffff !important;
 }
 
@@ -752,6 +872,37 @@ div[class*="from-[#0056d2]"][class*="rounded-xl"] * {
   margin-bottom: 1.35rem;
 }
 
+.gs-dashboard-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.gs-history-chip {
+  flex-shrink: 0;
+  border: 1px solid #b7d0f5;
+  background: #eef5ff;
+  color: #0b1f44;
+  font-weight: 700;
+  font-size: 0.92rem;
+  border-radius: 999px;
+  padding: 0.65rem 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.gs-history-chip:hover {
+  background: #dbeafe;
+  transform: translateY(-1px);
+}
+
+.gs-link-card-history {
+  border-color: #0056d2;
+  background: linear-gradient(180deg, #ffffff 0%, #eef5ff 100%);
+}
+
 .gs-dashboard-head h2 {
   margin: 0 0 0.35rem;
   font-size: clamp(1.5rem, 3vw, 2rem);
@@ -918,6 +1069,25 @@ div[class*="from-[#0056d2]"][class*="rounded-xl"] * {
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0;
+  overflow: hidden;
+}
+
+.gs-account-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gs-account-initial {
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.gs-account-btn:hover .gs-account-initial,
+.gs-account.is-open .gs-account-btn .gs-account-initial {
+  color: #fff;
 }
 
 .gs-account-btn:hover,
@@ -1004,22 +1174,207 @@ div[class*="from-[#0056d2]"][class*="rounded-xl"] * {
   color: #c62828;
 }
 
+/* Edit profile modal */
+.gs-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(15, 30, 60, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.gs-modal-card {
+  width: 100%;
+  max-width: 440px;
+  max-height: min(90vh, 720px);
+  overflow: auto;
+  padding: 1.25rem 1.35rem 1.4rem;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 24px 48px rgba(15, 40, 90, 0.2);
+}
+
+.gs-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.gs-modal-head h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #1a1a1a;
+}
+
+.gs-modal-close {
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #666;
+  padding: 0 0.25rem;
+}
+
+.gs-edit-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.gs-edit-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gs-edit-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #e8f0fb;
+  color: #0056d2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  border: 1px solid #d0d7e2;
+}
+
+.gs-edit-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gs-edit-avatar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-start;
+}
+
+.gs-file-btn {
+  display: inline-block;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.5rem;
+  background: #0056d2;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.gs-link-btn {
+  border: none;
+  background: none;
+  color: #c62828;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.gs-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.88rem;
+  color: #444;
+}
+
+.gs-field input {
+  border: 1px solid #d0d7e2;
+  border-radius: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: #fff;
+  color: #1a1a1a;
+}
+
+.gs-field input:disabled {
+  background: #f3f5f8;
+  color: #777;
+}
+
+.gs-field-hint {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  color: #6a6a6a;
+  font-weight: 600;
+}
+
+.gs-form-error {
+  margin: 0;
+  color: #c62828;
+  font-size: 0.9rem;
+}
+
+.gs-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.gs-btn-ghost,
+.gs-btn-primary {
+  border-radius: 0.55rem;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+}
+
+.gs-btn-ghost {
+  background: #f0f3f8;
+  color: #333;
+}
+
+.gs-btn-primary {
+  background: #0056d2;
+  color: #fff;
+}
+
+.gs-btn-primary:disabled,
+.gs-btn-ghost:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
 /* Light-theme compatibility for older dark utility classes */
 .glass-card .text-white,
 .glass-card .text-white\/90,
 .glass-card .text-white\/85,
-.glass-card .text-white\/80,
+.glass-card .text-white\/80 {
+  color: #1a1a1a !important;
+}
+
 .glass-card .text-white\/75,
 .glass-card .text-white\/70,
 .glass-card .text-white\/65,
 .glass-card .text-white\/60,
 .glass-card .text-white\/55,
-.glass-card .text-white\/50 {
-  color: #1a1a1a !important;
-}
-
+.glass-card .text-white\/50,
 .glass-card [class*="text-white/"] {
   color: #5b5b5b !important;
+}
+
+/* Pure white utility text on white cards → brand blue (icons / labels) */
+.glass-card > .text-white,
+button.glass-card.text-white,
+a.glass-card.text-white {
+  color: #0056d2 !important;
 }
 
 .page-shell > *:not(.gs-home) .text-white\/75,
@@ -1035,6 +1390,18 @@ div[class*="from-[#0056d2]"][class*="rounded-xl"] * {
 .page-shell > *:not(.gs-home) .text-white\/85,
 .page-shell > *:not(.gs-home) .text-white\/80 {
   color: #1a1a1a !important;
+}
+
+/* Back / icon-only round glass buttons site-wide */
+button.rounded-full.glass-card,
+.rounded-full.glass-card {
+  color: #0056d2 !important;
+}
+
+button.rounded-full.glass-card svg,
+.rounded-full.glass-card svg {
+  color: #0056d2 !important;
+  stroke: currentColor;
 }
 
 @media (max-width: 900px) {

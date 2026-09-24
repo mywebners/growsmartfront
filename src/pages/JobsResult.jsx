@@ -5,15 +5,25 @@ import { ExternalLink, ArrowLeft } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import GlassCard from "../components/GlassCard";
 import AnimatedButton from "../components/AnimatedButton";
+import { saveUserGuidance } from "../utils/api";
 
 function JobsResult() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { guidanceType, resetAssessment } = useContext(AuthContext);
+  const {
+    guidanceType,
+    resetAssessment,
+    matricStream,
+    intermediateStream,
+    matricMarks,
+    intermediateMarks,
+  } = useContext(AuthContext);
 
   const existing = location.state?.result;
+  const payload = location.state?.payload;
   const [result, setResult] = useState(existing || null);
   const [error, setError] = useState("");
+  const savedRef = React.useRef(false);
 
   useEffect(() => {
     if (existing) {
@@ -27,6 +37,39 @@ function JobsResult() {
     }
     setError("No job result found. Please enter your field or program first.");
   }, [existing, guidanceType, navigate]);
+
+  useEffect(() => {
+    if (!result || savedRef.current) return;
+    savedRef.current = true;
+    (async () => {
+      try {
+        await saveUserGuidance({
+          type: "jobs",
+          title: result.summary?.slice(0, 80) || "Jobs guidance",
+          jobsResult: result,
+          payload: payload || {},
+          matric: {
+            stream: matricStream,
+            marks: matricMarks?.[matricStream] || {},
+          },
+          intermediate: {
+            stream: intermediateStream,
+            marks: intermediateMarks?.[intermediateStream] || {},
+          },
+        });
+      } catch (err) {
+        console.error("Failed to save jobs guidance:", err);
+        savedRef.current = false;
+      }
+    })();
+  }, [
+    result,
+    payload,
+    matricStream,
+    intermediateStream,
+    matricMarks,
+    intermediateMarks,
+  ]);
 
   const jobs = result?.jobs || [];
   const portals = result?.portals || [];

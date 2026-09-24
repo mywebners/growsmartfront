@@ -2,29 +2,47 @@ import React, { useEffect, useMemo, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, RotateCcw, Trash2 } from "lucide-react";
-import { getHistoryItems, deleteHistoryEntry } from "../utils/historyStorage";
+import { deleteUserGuidance } from "../utils/api";
 import { AuthContext } from "../context/AuthContext";
 import AnimatedButton from "../components/AnimatedButton";
 
 function History() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { user: ctxUser, resetAssessment } = useContext(AuthContext);
-
-  const userData = localStorage.getItem("user");
-  let user = ctxUser || userData || "guest";
-  if (!ctxUser && userData && userData.startsWith("{")) {
-    try {
-      const parsed = JSON.parse(userData);
-      user = parsed?.firstName || parsed?.name || userData;
-    } catch {
-      user = "guest";
-    }
-  }
+  const { resetAssessment, guidanceHistory, refreshMe } = useContext(AuthContext);
 
   useEffect(() => {
-    setData(getHistoryItems(user));
-  }, [user]);
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      setError("");
+      try {
+        // Prefer refresh of /auth/me (same data as first post-login load)
+        const me = await refreshMe();
+        if (!cancelled) {
+          const list = Array.isArray(me?.guidance)
+            ? me.guidance
+            : Array.isArray(guidanceHistory)
+              ? guidanceHistory
+              : [];
+          setData(list);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || "Could not load account history");
+          setData([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const sortedItems = useMemo(() => {
     return [...data].sort(
@@ -37,14 +55,22 @@ function History() {
     navigate("/guidance", { replace: true });
   };
 
-  const handleDelete = (e, id) => {
+  const handleDelete = async (e, id) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!window.confirm("Remove this result from your history?")) return;
-    setData(deleteHistoryEntry(user, id));
+    if (!window.confirm("Remove this result from your account?")) return;
+    try {
+      await deleteUserGuidance(id);
+      setData((prev) => prev.filter((row) => row.id !== id));
+    } catch (err) {
+      alert(err.message || "Delete failed");
+    }
   };
 
   const openDetail = (id) => navigate(`/history/${id}`);
+
+  const cardTitle = (item) =>
+    item.career || item.title || (item.type ? String(item.type).toUpperCase() : "Guidance");
 
   return (
     <div className="min-h-screen pt-8 sm:pt-10 pb-16 sm:pb-20 px-3 max-[320px]:px-2 sm:px-4">
@@ -64,7 +90,7 @@ function History() {
 
           <div className="flex flex-col xs:flex-row xs:items-start xs:justify-between gap-4 mb-6">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#003a9b] via-[#0056d2] to-[#2f7de1] bg-clip-text text-transparent">
-              My career history
+              My guidance history
             </h1>
             <button
               type="button"
@@ -76,9 +102,16 @@ function History() {
             </button>
           </div>
           <p className="text-[#5b5b5b] text-base sm:text-lg max-w-2xl">
-            Stored on this browser. Tap a card for full marks and skills. Trash removes only that entry.
+            Saved on your GrowSmart account (MongoDB) — available after login on any device.
           </p>
         </motion.div>
+
+        {loading && (
+          <p className="text-center text-[#5b5b5b] py-10">Loading your account history…</p>
+        )}
+        {error && !loading && (
+          <p className="text-center text-[#c62828] py-6">{error}</p>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {sortedItems.map((item, index) => (
@@ -115,8 +148,11 @@ function History() {
                     <span className="text-base sm:text-lg font-black text-white">#{index + 1}</span>
                   </div>
                   <div className="min-w-0 flex-1">
+                    <p className="text-xs uppercase tracking-wide text-[#2f7de1] mb-1">
+                      {item.type || "career"}
+                    </p>
                     <h2 className="text-xl sm:text-2xl font-bold text-[#1a1a1a] group-hover:text-[#9ec5ff] transition-colors break-anywhere leading-snug">
-                      {item.career}
+                      {cardTitle(item)}
                     </h2>
                     <p className="text-[#6a6a6a] text-sm sm:text-base mt-2">
                       {new Date(item.createdAt).toLocaleString()}
@@ -146,7 +182,7 @@ function History() {
           ))}
         </div>
 
-        {sortedItems.length === 0 && (
+        {!loading && !error && sortedItems.length === 0 && (
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -154,7 +190,7 @@ function History() {
           >
             <h3 className="text-2xl sm:text-3xl font-bold text-[#1a1a1a] mb-4">No history yet</h3>
             <p className="text-[#6a6a6a] mb-8 max-w-md mx-auto text-base">
-              Finish a test once and it will show up here.
+              Finish guidance once and it will be saved to your account.
             </p>
             <button
               type="button"
